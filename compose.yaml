@@ -1,0 +1,7 @@
+﻿services:
+  temasek.auth:
+    image: temasek.auth
+    build:
+      context: .
+      dockerfile: Temasek.Auth/Dockerfile
+

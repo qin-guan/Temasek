@@ -1,0 +1,6 @@
+@Temasek.Auth_HostAddress = http://localhost:5011
+
+GET {{Temasek.Auth_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
