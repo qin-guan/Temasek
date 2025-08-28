@@ -1,8 +1,71 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using OpenIddict.Abstractions;
+using Scalar.AspNetCore;
+using Temasek.Auth.Data;
+using Temasek.Auth.Features;
+using Temasek.Auth.Options;
+using Temasek.Auth.Workers;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOptions<FormGovSgOptions>()
+    .Bind(builder.Configuration.GetSection("FormGovSg"));
+
+builder.Services.AddOptions<OpenIddictOptions>()
+    .Bind(builder.Configuration.GetSection("OpenIddict"));
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddCors();
+builder.Services.AddSession();
 builder.Services.AddOpenApi();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
+builder.Services.AddHostedService<OpenIddictBackgroundService>();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("Default"));
+    options.UseOpenIddict();
+});
+
+builder.Services
+    .AddOpenIddict()
+    .AddCore(options =>
+    {
+        options.UseEntityFrameworkCore()
+            .UseDbContext<ApplicationDbContext>();
+    })
+    .AddServer(options =>
+    {
+        options.SetAuthorizationEndpointUris("connect/authorize")
+            .SetEndSessionEndpointUris("connect/logout")
+            .SetTokenEndpointUris("connect/token")
+            .SetUserInfoEndpointUris("connect/userinfo");
+
+        options.RegisterScopes(
+            OpenIddictConstants.Scopes.OfflineAccess,
+            OpenIddictConstants.Scopes.Email,
+            OpenIddictConstants.Scopes.Profile,
+            OpenIddictConstants.Scopes.Roles
+        );
+
+        options.AllowAuthorizationCodeFlow()
+            .AllowRefreshTokenFlow();
+
+        options.RequireProofKeyForCodeExchange();
+
+        options.AddDevelopmentEncryptionCertificate()
+            .AddDevelopmentSigningCertificate();
+
+        options.UseAspNetCore()
+            .EnableAuthorizationEndpointPassthrough()
+            .EnableEndSessionEndpointPassthrough()
+            .EnableTokenEndpointPassthrough()
+            .EnableStatusCodePagesIntegration();
+    });
 
 var app = builder.Build();
 
@@ -10,32 +73,26 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
+
+await using var scope = app.Services.CreateAsyncScope();
+var openIddictOptions = scope.ServiceProvider.GetRequiredService<IOptions<OpenIddictOptions>>();
+
+app.UseCors(p =>
+{
+    foreach (var uri in openIddictOptions.Value.Clients.SelectMany(c => c.RedirectUris))
+    {
+        p.WithOrigins(uri.Scheme + "://" + uri.Host).AllowAnyHeader().AllowCredentials();
+    }
+});
+app.UseSession();
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.MapGet("/weatherforecast",
-        () =>
-        {
-            var forecast = Enumerable.Range(1, 5).Select(index =>
-                    new WeatherForecast(
-                        DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                        Random.Shared.Next(-20, 55),
-                        summaries[Random.Shared.Next(summaries.Length)]
-                    ))
-                .ToArray();
-            return forecast;
-        })
-    .WithName("GetWeatherForecast");
+app.MapOidcEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
