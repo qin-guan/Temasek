@@ -5,3 +5,15 @@
       context: .
       dockerfile: Temasek.Auth/Dockerfile
 
+  temasek.calendarr:
+    image: temasek.calendarr
+    build:
+      context: .
+      dockerfile: Temasek.Calendarr/Temasek.Calendarr/Dockerfile
+
+  temasek.calendarr.client:
+    image: temasek.calendarr.client
+    build:
+      context: .
+      dockerfile: Temasek.Calendarr/Temasek.Calendarr.Client/Dockerfile
+
