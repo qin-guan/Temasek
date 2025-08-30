@@ -9,18 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="Data\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Temasek.Calendarr.Client\Temasek.Calendarr.Client.csproj"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.8"/>
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.8"/>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.8"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.8"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8"/>
     </ItemGroup>
-
+    
     <ItemGroup>
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
