@@ -1,12 +1,38 @@
-using Microsoft.AspNetCore.Authentication;
+using System.Text;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Temasek.Calendarr.Components;
 using Temasek.Calendarr.Extensions;
+using Temasek.Calendarr.Features;
+using Temasek.Calendarr.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOptions<SyncOptions>()
+    .Bind(builder.Configuration.GetSection("Sync"));
+
+builder.Services.AddKeyedSingleton<CalendarService>("Sync", (sp, _) =>
+{
+    var options = sp.GetRequiredService<IOptions<SyncOptions>>();
+    var s = Convert.FromBase64String(options.Value.ServiceAccountJsonCredential);
+
+    var credential = GoogleCredential.FromJson(Encoding.UTF8.GetString(s)).CreateScoped(
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.events"
+    );
+    
+    var service = new CalendarService(new BaseClientService.Initializer
+    {
+        HttpClientInitializer = credential
+    });
+
+    return service;
+});
 
 builder.Services.AddAuthentication(options =>
     {
@@ -77,5 +103,7 @@ auth.MapPost("/logout",
         [CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme]
     )
 );
+
+app.MapSync();
 
 app.Run();
