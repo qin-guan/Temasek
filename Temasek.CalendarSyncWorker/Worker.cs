@@ -8,15 +8,18 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly CalendarSyncService _syncService;
+    private readonly HealthCheckService _healthCheckService;
     private readonly CalendarSyncOptions _options;
 
     public Worker(
         ILogger<Worker> logger, 
         CalendarSyncService syncService,
+        HealthCheckService healthCheckService,
         IOptions<CalendarSyncOptions> options)
     {
         _logger = logger;
         _syncService = syncService;
+        _healthCheckService = healthCheckService;
         _options = options.Value;
     }
 
@@ -40,6 +43,9 @@ public class Worker : BackgroundService
                 _logger.LogInformation("Calendar synchronization completed successfully in {Duration}ms", 
                     syncDuration.TotalMilliseconds);
 
+                // Record successful sync for health monitoring
+                _healthCheckService.RecordSyncResult(true);
+
                 // Wait for the configured interval before next sync
                 await Task.Delay(_options.SyncIntervalMs, stoppingToken);
             }
@@ -51,6 +57,9 @@ public class Worker : BackgroundService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during calendar synchronization cycle");
+                
+                // Record failed sync for health monitoring
+                _healthCheckService.RecordSyncResult(false);
                 
                 // Wait before retrying (shorter interval on error)
                 var errorRetryDelay = Math.Min(_options.SyncIntervalMs, _options.InitialRetryDelayMs);

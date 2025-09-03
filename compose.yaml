@@ -17,3 +17,20 @@
       context: .
       dockerfile: Temasek.Calendarr/Temasek.Calendarr.Client/Dockerfile
 
+  temasek.calendar-sync-worker:
+    image: temasek.calendar-sync-worker
+    build:
+      context: Temasek.CalendarSyncWorker
+      dockerfile: Dockerfile
+    environment:
+      - CalendarSync__ServiceAccountJsonCredential=${CALENDAR_SERVICE_ACCOUNT_JSON}
+      - CalendarSync__PrimaryCalendarId=${PRIMARY_CALENDAR_ID}
+      - CalendarSync__SecondaryCalendarId=${SECONDARY_CALENDAR_ID}
+      - CalendarSync__SyncIntervalMs=${SYNC_INTERVAL_MS:-60000}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "dotnet", "Temasek.CalendarSyncWorker.dll", "--health-check"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

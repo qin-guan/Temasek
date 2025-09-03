@@ -38,8 +38,10 @@ builder.Services.AddSingleton<CalendarService>(serviceProvider =>
     return service;
 });
 
-// Add sync service
+// Add sync service and health check service
 builder.Services.AddSingleton<CalendarSyncService>();
+builder.Services.AddSingleton<HealthCheckService>();
+builder.Services.AddSingleton<ConfigurationValidationService>();
 
 // Add the hosted worker service
 builder.Services.AddHostedService<Worker>();
@@ -50,10 +52,23 @@ builder.Logging.AddDebug();
 
 var host = builder.Build();
 
-// Log startup information
+// Get required services for startup validation and logging
 var logger = host.Services.GetRequiredService<ILogger<Program>>();
 var options = host.Services.GetRequiredService<IOptions<CalendarSyncOptions>>().Value;
 
+// Validate configuration on startup
+var validationService = host.Services.GetRequiredService<ConfigurationValidationService>();
+var validationResult = validationService.ValidateConfiguration();
+validationResult.LogResults(logger);
+
+if (!validationResult.IsValid)
+{
+    logger.LogCritical("Configuration validation failed. Please fix the configuration errors before running the worker.");
+    Environment.ExitCode = 1;
+    return;
+}
+
+// Log startup information
 logger.LogInformation("Starting Temasek Calendar Sync Worker");
 logger.LogInformation("Primary Calendar: {PrimaryId}", options.PrimaryCalendarId);
 logger.LogInformation("Secondary Calendar: {SecondaryId}", options.SecondaryCalendarId);

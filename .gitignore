@@ -4,3 +4,12 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 .idea/
+
+# Environment files with secrets
+.env
+.env.local
+.env.production
+
+# Service account keys
+*service-account*.json
+*credentials*.json
