@@ -3,6 +3,7 @@ namespace Temasek.Calendarr.Options;
 public class SyncOptions
 {
     public required string ServiceAccountJsonCredential { get; set; }
-    public required string PrimaryCalendarId { get; set; }
-    public required string SecondaryCalendarId { get; set; }
+    public required string ParentCalendarId { get; set; }
+    public required string ChildCalendarId { get; set; }
+    public required TimeSpan SyncInterval { get; set; }
 }

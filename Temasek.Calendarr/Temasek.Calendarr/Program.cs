@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Temasek.Calendarr.Components;
 using Temasek.Calendarr.Extensions;
 using Temasek.Calendarr.Features;
+using Temasek.Calendarr.Features.Sync;
 using Temasek.Calendarr.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -67,6 +68,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHostedService<IncrementalSyncBackgroundService>();
 
 var app = builder.Build();
 

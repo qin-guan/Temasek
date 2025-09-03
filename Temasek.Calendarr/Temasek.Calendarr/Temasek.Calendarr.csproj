@@ -5,20 +5,20 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-      <UserSecretsId>87e3f839-e620-453d-ab8a-0b477b26520c</UserSecretsId>
-  </PropertyGroup>
+        <UserSecretsId>87e3f839-e620-453d-ab8a-0b477b26520c</UserSecretsId>
+    </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Temasek.Calendarr.Client\Temasek.Calendarr.Client.csproj" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3746" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.8" />
+        <ProjectReference Include="..\Temasek.Calendarr.Client\Temasek.Calendarr.Client.csproj"/>
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3746"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.8"/>
     </ItemGroup>
-    
+
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
 </Project>
