@@ -19,7 +19,8 @@ public class IncrementalSyncBackgroundService(
         while (!stoppingToken.IsCancellationRequested)
         {
             var tokenReq = calendarService.Events.List(options.Value.ParentCalendarId);
-            tokenReq.MaxResults = 1;
+            tokenReq.TimeMinDateTimeOffset = DateTimeOffset.Now.AddDays(-7);
+            tokenReq.MaxResults = 2499;
 
             var tokenRes = await tokenReq.ExecuteAsync(stoppingToken);
             _syncToken = tokenRes.NextSyncToken;
