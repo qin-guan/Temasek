@@ -36,7 +36,7 @@ public class IncrementalSyncBackgroundService(
                 ct: stoppingToken
             );
 
-            if (changedEvents.Count != 0)
+            if (changedEvents.Count == 0)
             {
                 logger.LogInformation("No changes since last update");
                 continue;
