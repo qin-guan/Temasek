@@ -17,41 +17,19 @@
     <RadzenButton Text="Force full sync" Click="ForceSync"/>
 </RadzenStack>
 
-<RadzenDataGrid @ref="grid" TItem="InMemoryLogService.LogMessage"
-                Data="LogService.GetLogs().Reverse()"
-                Density="Density.Compact"
-                AllowFiltering="true"
-                AllowSorting="true"
-                AllowColumnResize="true"
->
-    <Columns>
-        <RadzenDataGridColumn Property="@nameof(InMemoryLogService.LogMessage.Timestamp)"
-                              Title="Timestamp"
-                              Width="200px"
-                              Filterable="false"
-        />
-        <RadzenDataGridColumn Property="@nameof(InMemoryLogService.LogMessage.Level)"
-                              Title="Level"
-                              Width="200px"
-                              Sortable="false"
-        />
-        <RadzenDataGridColumn Property="@nameof(InMemoryLogService.LogMessage.Category)"
-                              Title="Category"
-                              Width="300px"
-                              Sortable="false"
-        />
-        <RadzenDataGridColumn Property="@nameof(InMemoryLogService.LogMessage.Message)"
-                              Title="Message"
-                              Filterable="false"
-                              Sortable="false"
-                              MinWidth="400px"
-        />
-    </Columns>
-</RadzenDataGrid>
+<div>
+    @foreach (var log in LogService.GetLogs().Reverse())
+    {
+        <div style="margin-bottom: 4px" class="@GetLogClassNames(log.Level)">
+            <span style="color: #666;">@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</span>
+            <span style="margin: 0 5px;">[@log.Level]</span>
+            <span style="margin-right: 5px;">[<span title="@log.Category">@log.Category</span>]</span>
+            <span>@log.Message</span>
+        </div>
+    }
+</div>
 
 @code {
-
-    RadzenDataGrid<InMemoryLogService.LogMessage> grid;
 
     protected override void OnInitialized()
     {
@@ -60,8 +38,19 @@
 
     private void OnLogServiceOnOnLogsChanged()
     {
-        grid.Reload();
         InvokeAsync(StateHasChanged);
+    }
+    
+    private string GetLogClassNames(LogLevel level)
+    {
+        return level switch
+        {
+            LogLevel.Critical => "rz-background-color-danger-darker rz-color-on-danger-darker rz-p-2",
+            LogLevel.Error => "rz-color-danger",
+            LogLevel.Warning => "rz-background-color-warning rz-color-on-warning",
+            LogLevel.Information => "rz-color-info-darker",
+            _ => ""
+        };
     }
 
     public async Task ForceSync()
