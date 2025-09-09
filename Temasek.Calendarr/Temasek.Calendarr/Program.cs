@@ -6,13 +6,16 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Radzen;
 using Temasek.Calendarr.Components;
 using Temasek.Calendarr.Extensions;
-using Temasek.Calendarr.Features;
 using Temasek.Calendarr.Features.Sync;
 using Temasek.Calendarr.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<InMemoryLogService>();
+builder.Services.AddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
 
 builder.Services.AddOptions<SyncOptions>()
     .Bind(builder.Configuration.GetSection("Sync"));
@@ -46,7 +49,8 @@ builder.Services.AddAuthentication(options =>
 
         options.Authority = "https://temasek-auth.from.sg";
         options.ClientId = "calendarr";
-
+        
+        options.GetClaimsFromUserInfoEndpoint = true;
         options.ResponseType = OpenIdConnectResponseType.Code;
 
         options.TokenValidationParameters.NameClaimType = "given_name";
@@ -63,6 +67,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents()
     .AddAuthenticationStateSerialization();
+
+builder.Services.AddRadzenComponents();
 
 builder.Services.AddCascadingAuthenticationState();
 

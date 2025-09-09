@@ -1,7 +1,68 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@using Temasek.Calendarr.Features.Sync
+@inject InMemoryLogService LogService
+@implements IDisposable
 
-<PageTitle>Home</PageTitle>
+@attribute [Authorize]
 
-<h1>Hello, world!</h1>
+<PageTitle>Calendarr</PageTitle>
 
-Welcome to your new app.
+<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween"
+             AlignItems="AlignItems.Center">
+    <h2>Sync status</h2>
+    <RadzenButton Icon="refresh"/>
+</RadzenStack>
+
+<RadzenDataGrid @ref="grid" TItem="InMemoryLogService.LogMessage"
+                Data="LogService.GetLogs().Reverse()"
+                Density="Density.Compact"
+                AllowFiltering="true"
+                AllowSorting="true"
+                AllowColumnResize="true"
+>
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(InMemoryLogService.LogMessage.Timestamp)"
+                              Title="Timestamp"
+                              Width="200px"
+                              Filterable="false"
+        />
+        <RadzenDataGridColumn Property="@nameof(InMemoryLogService.LogMessage.Level)"
+                              Title="Level"
+                              Width="200px"
+                              Sortable="false"
+        />
+        <RadzenDataGridColumn Property="@nameof(InMemoryLogService.LogMessage.Category)"
+                              Title="Category"
+                              Width="300px"
+                              Sortable="false"
+        />
+        <RadzenDataGridColumn Property="@nameof(InMemoryLogService.LogMessage.Message)"
+                              Title="Message"
+                              Filterable="false"
+                              Sortable="false"
+        />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+
+    RadzenDataGrid<InMemoryLogService.LogMessage> grid;
+
+    protected override void OnInitialized()
+    {
+        LogService.OnLogsChanged += OnLogServiceOnOnLogsChanged;
+    }
+
+    private void OnLogServiceOnOnLogsChanged()
+    {
+        grid.Reload();
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        LogService.OnLogsChanged -= OnLogServiceOnOnLogsChanged;
+    }
+
+}
