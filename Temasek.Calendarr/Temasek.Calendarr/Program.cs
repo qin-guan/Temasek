@@ -49,7 +49,6 @@ builder.Services.AddAuthentication(options =>
 
         options.ResponseType = OpenIdConnectResponseType.Code;
 
-        options.MapInboundClaims = false;
         options.TokenValidationParameters.NameClaimType = "given_name";
         options.TokenValidationParameters.RoleClaimType = "roles";
     })
