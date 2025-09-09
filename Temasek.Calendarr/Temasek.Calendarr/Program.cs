@@ -15,6 +15,7 @@ using Temasek.Calendarr.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<InMemoryLogService>();
+builder.Services.AddSingleton<SyncService>();
 builder.Services.AddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
 
 builder.Services.AddOptions<SyncOptions>()
@@ -37,6 +38,8 @@ builder.Services.AddKeyedSingleton<CalendarService>("Sync", (sp, _) =>
 
     return service;
 });
+
+#region Auth 
 
 builder.Services.AddAuthentication(options =>
     {
@@ -62,6 +65,8 @@ builder.Services.ConfigureCookieOidc(
     CookieAuthenticationDefaults.AuthenticationScheme,
     OpenIdConnectDefaults.AuthenticationScheme
 );
+
+#endregion
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
