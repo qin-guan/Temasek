@@ -1,0 +1,42 @@
+﻿@inherits LayoutComponentBase
+
+<BootstrapBlazorRoot>
+    <Layout AdditionalAssemblies="[typeof(MainLayout).Assembly]">
+        <Header>
+            <div>
+                <span class="fw-semibold">
+                    Temasek Operatorr
+                </span>
+            </div>
+        </Header>
+        <Side>
+            <Menu Items="@SideMenuItems"
+                  DisableNavigation="true"
+                  IsVertical="true">
+            </Menu>
+        </Side>
+        <Main>
+            @Body
+        </Main>
+    </Layout>
+</BootstrapBlazorRoot>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+
+    public readonly List<MenuItem> SideMenuItems =
+    [
+        new()
+        {
+            Text = "Home",
+            Url = "/",
+            IsActive = true
+        }
+    ];
+
+}
