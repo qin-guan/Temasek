@@ -18,7 +18,7 @@ builder.Services.AddOptions<OpenIddictOptions>()
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddCors();
-builder.Services.AddSession();
+builder.Services.AddSession(options => { options.Cookie.Expiration = TimeSpan.FromMinutes(5); });
 builder.Services.AddOpenApi();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();

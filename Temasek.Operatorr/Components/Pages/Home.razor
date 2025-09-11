@@ -1,5 +1,57 @@
 ﻿@page "/"
+@using SqlSugar
+@using Temasek.Operatorr.Entities
 
-<PageTitle>Home</PageTitle>
+@inject ISqlSugarClient SqlClient
 
-<Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="test"></Button>
+<PageTitle>Dashboard</PageTitle>
+
+<div class="row">
+    <div class="col">
+        <Card>
+            <HeaderTemplate>
+                DC
+            </HeaderTemplate>
+            <BodyTemplate>
+                @Dc?.UserId
+            </BodyTemplate>
+        </Card>
+    </div>
+    
+    <div class="col">
+        <Card>
+            <HeaderTemplate>
+                CDOS
+            </HeaderTemplate>
+            <BodyTemplate>
+                @Cdos?.UserId
+            </BodyTemplate>
+        </Card>
+    </div>
+
+    <div class="col">
+        <Card>
+            <HeaderTemplate>
+                CDOO
+            </HeaderTemplate>
+            <BodyTemplate>
+                @Cdoo?.UserId
+            </BodyTemplate>
+        </Card>
+    </div>
+</div>
+
+@code {
+
+    public ClerkShiftRecord? Dc { get; set; }
+    public OfficerShiftRecord? Cdoo { get; set; }
+    public SpecShiftRecord? Cdos { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Dc = await SqlClient.Queryable<ClerkShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+        Cdoo = await SqlClient.Queryable<OfficerShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+        Cdos = await SqlClient.Queryable<SpecShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+    }
+
+}

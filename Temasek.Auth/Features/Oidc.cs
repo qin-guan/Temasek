@@ -98,7 +98,7 @@ public static class Oidc
 
                 if (session.Name is null || session.Nric is null || request is null)
                 {
-                    return TypedResults.BadRequest();
+                    return TypedResults.BadRequest("You already have an authentication session in progress. Please clear your cookies, or wait 5 minutes, then try again.");
                 }
 
                 var identity = new ClaimsIdentity(

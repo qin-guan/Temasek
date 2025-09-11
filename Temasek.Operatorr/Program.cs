@@ -1,12 +1,46 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SqlSugar;
 using Temasek.Operatorr.Components;
+using Temasek.Operatorr.Extensions;
 using Temasek.Operatorr.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region Auth
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    })
+    .AddOpenIdConnect(options =>
+    {
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+        options.Authority = "https://temasek-auth.from.sg";
+        options.ClientId = "operatorr";
+        
+        options.GetClaimsFromUserInfoEndpoint = true;
+        options.ResponseType = OpenIdConnectResponseType.Code;
+
+        options.TokenValidationParameters.NameClaimType = "given_name";
+        options.TokenValidationParameters.RoleClaimType = "roles";
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+
+builder.Services.ConfigureCookieOidc(
+    CookieAuthenticationDefaults.AuthenticationScheme,
+    OpenIdConnectDefaults.AuthenticationScheme
+);
+
+#endregion
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddBootstrapBlazor();
 
@@ -48,5 +82,17 @@ app.UseAntiforgery();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+var auth = app.MapGroup("auth");
+
+auth.MapGet("/login", () => TypedResults.Challenge())
+    .AllowAnonymous();
+
+auth.MapPost("/logout",
+    () => TypedResults.SignOut(
+        authenticationSchemes:
+        [CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme]
+    )
+);
 
 app.Run();

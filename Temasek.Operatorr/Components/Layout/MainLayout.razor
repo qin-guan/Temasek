@@ -1,25 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
-<BootstrapBlazorRoot>
-    <Layout AdditionalAssemblies="[typeof(MainLayout).Assembly]">
-        <Header>
-            <div>
-                <span class="fw-semibold">
-                    Temasek Operatorr
-                </span>
-            </div>
-        </Header>
-        <Side>
-            <Menu Items="@SideMenuItems"
-                  DisableNavigation="true"
-                  IsVertical="true">
-            </Menu>
-        </Side>
-        <Main>
-            @Body
-        </Main>
-    </Layout>
-</BootstrapBlazorRoot>
+<AuthorizeView>
+    <NotAuthorized>
+        <RedirectToLogin/>
+    </NotAuthorized>
+    <Authorized>
+        <BootstrapBlazorRoot>
+            <Layout AdditionalAssemblies="[typeof(MainLayout).Assembly]" Menus="SideMenuItems" SideWidth="160px"
+                    style="height: 100dvh">
+                <Header>
+                    <div>
+                        <span class="fw-semibold">
+                            Temasek Operatorr
+                        </span>
+                    </div>
+                </Header>
+                <Side>
+                </Side>
+                <Main>
+                    @Body
+                </Main>
+            </Layout>
+        </BootstrapBlazorRoot>
+    </Authorized>
+</AuthorizeView>
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.

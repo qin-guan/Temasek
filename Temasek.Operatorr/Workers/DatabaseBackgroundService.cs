@@ -13,5 +13,32 @@ public class DatabaseBackgroundService(IServiceProvider sp) : BackgroundService
         client.CodeFirst.InitTables<ClerkShiftRecord>();
         client.CodeFirst.InitTables<OfficerShiftRecord>();
         client.CodeFirst.InitTables<SpecShiftRecord>();
+        
+        if (!await client.Queryable<ClerkShiftRecord>().AnyAsync(stoppingToken))
+        {
+            await client.Insertable(new ClerkShiftRecord
+            {
+                Start = DateTimeOffset.Now,
+                UserId = "XXX"
+            }).ExecuteCommandAsync(stoppingToken);
+        }
+        
+        if (!await client.Queryable<OfficerShiftRecord>().AnyAsync(stoppingToken))
+        {
+            await client.Insertable(new OfficerShiftRecord()
+            {
+                Start = DateTimeOffset.Now,
+                UserId = "XXX"
+            }).ExecuteCommandAsync(stoppingToken);
+        }
+        
+        if (!await client.Queryable<SpecShiftRecord>().AnyAsync(stoppingToken))
+        {
+            await client.Insertable(new SpecShiftRecord()
+            {
+                Start = DateTimeOffset.Now,
+                UserId = "XXX"
+            }).ExecuteCommandAsync(stoppingToken);
+        }
     }
 }
