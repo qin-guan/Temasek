@@ -74,6 +74,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             podman stop temasek-operatorr;
+            podman remove temasek-operatorr;
             podman pull ghcr.io/qin-guan/temasek-operatorr:main;
             podman run -d \
             	--name temasek-operatorr \

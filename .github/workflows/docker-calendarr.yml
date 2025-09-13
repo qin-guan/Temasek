@@ -74,6 +74,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             podman stop temasek-calendarr;
+            podman remove temasek-calendarr;
             podman pull ghcr.io/qin-guan/temasek-calendarr:main;
             podman run -d \
             	--name temasek-calendarr \
