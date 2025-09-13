@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Radzen;
 using SqlSugar;
 using Temasek.Operatorr.Components;
 using Temasek.Operatorr.Extensions;
@@ -42,7 +43,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddCascadingAuthenticationState();
 
-builder.Services.AddBootstrapBlazor();
+builder.Services.AddRadzenComponents();
 
 builder.Services.AddScoped<ISqlSugarClient>(s =>
 {

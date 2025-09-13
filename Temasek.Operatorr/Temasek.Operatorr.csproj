@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BootstrapBlazor" Version="9.10.0"/>
+        <PackageReference Include="Radzen.Blazor" Version="*"/>
         <PackageReference Include="SqlSugarCore" Version="5.1.4.202"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8"/>
     </ItemGroup>

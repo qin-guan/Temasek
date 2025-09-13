@@ -7,14 +7,14 @@
     <base href="/"/>
     <link rel="stylesheet" href="@Assets["app.css"]"/>
     <link rel="stylesheet" href="@Assets["Temasek.Operatorr.styles.css"]"/>
-    <link href="_content/BootstrapBlazor/css/bootstrap.blazor.bundle.min.css" rel="stylesheet">
+    <RadzenTheme Theme="material-dark" @rendermode="InteractiveServer" />
     <ImportMap/>
     <HeadOutlet/>
 </head>
 
 <body>
-<Routes/>
-<script src="_content/BootstrapBlazor/js/bootstrap.blazor.bundle.min.js"></script>
+<Routes @rendermode="InteractiveServer"/>
+<script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Colors).Assembly.GetName().Version)"></script>
 <script src="_framework/blazor.web.js"></script>
 </body>
 

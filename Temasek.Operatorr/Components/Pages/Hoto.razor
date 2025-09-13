@@ -1,0 +1,29 @@
+@page "/Hoto"
+
+<h3>HOTO</h3>
+
+<span>I want to HOTO...</span>
+
+<br/>
+
+<RadzenButton OnClick="@OnClick(Option.Clerk)">DC</RadzenButton>
+<RadzenButton OnClick="@OnClick(Option.Officer)">CDOO</RadzenButton>
+<RadzenButton OnClick="@OnClick(Option.Spec)">CDOS</RadzenButton>
+
+@code {
+
+    public Action OnClick(Option option)
+    {
+        return () =>
+        {
+        };
+    }
+
+    public enum Option
+    {
+        Clerk,
+        Officer,
+        Spec
+    }
+
+}
