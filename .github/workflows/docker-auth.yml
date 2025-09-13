@@ -74,7 +74,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             podman stop temasek-auth;
-            podman remove temasek-auth;
+            podman rm temasek-auth;
             podman pull ghcr.io/qin-guan/temasek-auth:main;
             podman run -d \
             	--name temasek-auth \
