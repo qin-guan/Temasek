@@ -63,13 +63,20 @@ jobs:
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
-
-#      - name: Deploy
-#        if: ${{ github.event_name != 'pull_request' }}
-#        uses: appleboy/ssh-action@v1
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          password: ${{ secrets.PASSWORD }}
-#          port: ${{ secrets.PORT }}
-#          script: bash ./start-temasek.sh
+        
+      - name: Deploy
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            podman stop temasek-operatorr;
+            podman pull ghcr.io/qin-guan/temasek-operatorr:main;
+            podman run -d \
+            	--name temasek-operatorr \
+            	-p 8002:8080 \
+            	-e ASPNETCORE_FORWARDEDHEADERS_ENABLED="true" \
+            	ghcr.io/qin-guan/temasek-operatorr:main

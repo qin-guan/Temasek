@@ -72,4 +72,22 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: bash ./start-temasek.sh
+          script: |
+            podman stop temasek-auth;
+            podman pull ghcr.io/qin-guan/temasek-auth:main;
+            podman run -d \
+            	--name temasek-auth \
+            	-p 8000:8080 \
+            	-e ConnectionStrings__Default="DataSource=app.db" \
+            	-e OpenIddict__Clients__0__ClientId="temasek-auth" \
+            	-e OpenIddict__Clients__0__RedirectUris__0="https://hoppscotch.io/oauth" \
+            	-e OpenIddict__Clients__0__RedirectUris__1="https://oauthdebugger.com/debug" \
+                    -e OpenIddict__Clients__1__ClientId="calendarr" \
+                    -e OpenIddict__Clients__1__RedirectUris__0="https://temasek-calendarr.from.sg/signin-oidc" \
+                    -e OpenIddict__Clients__1__RedirectUris__1="https://localhost:7124/signin-oidc" \
+                    -e OpenIddict__Clients__2__ClientId="operatorr" \
+                    -e OpenIddict__Clients__2__RedirectUris__0="https://temasek-operatorr.from.sg/signin-oidc" \
+                    -e OpenIddict__Clients__2__RedirectUris__1="https://localhost:7215/signin-oidc" \
+            	-e FormGovSg__CallbackApiKey="${{ secrets.AUTH_FORMSG_CALLBACK_API_KEY }}" \
+            	-e ASPNETCORE_FORWARDEDHEADERS_ENABLED="true" \
+            	ghcr.io/qin-guan/temasek-auth:main;
