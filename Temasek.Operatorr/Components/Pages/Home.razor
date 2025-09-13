@@ -6,46 +6,27 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<div class="row">
-    <div class="col">
-        <Card>
-            <HeaderTemplate>
-                DC
-            </HeaderTemplate>
-            <BodyTemplate>
-                @Dc?.UserId
-                <br/>
-                Since @Dc?.Start
-            </BodyTemplate>
-        </Card>
-    </div>
-    
-    <div class="col">
-        <Card>
-            <HeaderTemplate>
-                CDOS
-            </HeaderTemplate>
-            <BodyTemplate>
-                @Cdos?.UserId
-                <br/>
-                Since @Cdos?.Start
-            </BodyTemplate>
-        </Card>
-    </div>
+<RadzenCardGroup Responsive="true">
+    <RadzenCard>
+        <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap="1rem">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex">Duty Clerk</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1"><b>@Dc?.UserId</b></RadzenText>
+        </RadzenStack>
+    </RadzenCard>
+    <RadzenCard>
+        <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap="1rem">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex">CDOO</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1"><b>@Cdoo?.UserId</b></RadzenText>
+        </RadzenStack>
+    </RadzenCard>
+    <RadzenCard>
+        <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap="1rem">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex">CDOS</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1"><b>@Cdos?.UserId</b></RadzenText>
+        </RadzenStack>
+    </RadzenCard>
 
-    <div class="col">
-        <Card>
-            <HeaderTemplate>
-                CDOO
-            </HeaderTemplate>
-            <BodyTemplate>
-                @Cdoo?.UserId
-                <br/>
-                Since @Cdoo?.Start
-            </BodyTemplate>
-        </Card>
-    </div>
-</div>
+</RadzenCardGroup>
 
 @code {
 
