@@ -1,22 +1,70 @@
 @page "/Hoto"
+@using SqlSugar
+@using Temasek.Operatorr.Entities
+@inject ISqlSugarClient SqlClient
 
-<h3>HOTO</h3>
+<RadzenStack>
+    <RadzenText TextStyle="TextStyle.Overline">Hand Over Take Over</RadzenText>
+    <RadzenText TextStyle="TextStyle.DisplayH5">Who are you taking over?</RadzenText>
+    <RadzenText TextStyle="TextStyle.Caption">Pick from the appropriate role below.</RadzenText>
 
-<span>I want to HOTO...</span>
-
-<br/>
-
-<RadzenButton OnClick="@OnClick(Option.Clerk)">DC</RadzenButton>
-<RadzenButton OnClick="@OnClick(Option.Officer)">CDOO</RadzenButton>
-<RadzenButton OnClick="@OnClick(Option.Spec)">CDOS</RadzenButton>
+    <RadzenRadioButtonList @bind-Value="Selected" TValue="Option?" class="rz-mt-2">
+        <Items>
+            <RadzenRadioButtonListItem Text="DC" Value="Option.Clerk" TValue="Option?"/>
+            <RadzenRadioButtonListItem Text="CDOO" Value="Option.Officer" TValue="Option?"/>
+            <RadzenRadioButtonListItem Text="CDOS" Value="Option.Spec" TValue="Option?"/>
+        </Items>
+    </RadzenRadioButtonList>
+    
+    @if (Selected is not null)
+    {
+        <hr style="width: 100%"/>
+        <RadzenText>You are taking over from</RadzenText>
+        @switch (Selected)
+        {
+            case Option.Clerk:
+                <RadzenCard>
+                    <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap="1rem">
+                        <RadzenText TextStyle="TextStyle.Overline">DC</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@Dc?.UserId</b></RadzenText>
+                    </RadzenStack>
+                </RadzenCard>
+                break;
+            case Option.Officer:
+                <RadzenCard>
+                    <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap="1rem">
+                        <RadzenText TextStyle="TextStyle.Overline">CDOO</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@Cdoo?.UserId</b></RadzenText>
+                    </RadzenStack>
+                </RadzenCard>
+                break;
+            case Option.Spec:
+                <RadzenCard>
+                    <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Start" Gap="1rem">
+                        <RadzenText TextStyle="TextStyle.Overline">CDOS</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@Cdos?.UserId</b></RadzenText>
+                    </RadzenStack>
+                </RadzenCard>
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+</RadzenStack>
 
 @code {
 
-    public Action OnClick(Option option)
+    public Option? Selected { get; set; }
+    
+    public ClerkShiftRecord? Dc { get; set; }
+    public OfficerShiftRecord? Cdoo { get; set; }
+    public SpecShiftRecord? Cdos { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        return () =>
-        {
-        };
+        Dc = await SqlClient.Queryable<ClerkShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+        Cdoo = await SqlClient.Queryable<OfficerShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+        Cdos = await SqlClient.Queryable<SpecShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
     }
 
     public enum Option

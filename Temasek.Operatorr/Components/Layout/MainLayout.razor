@@ -10,12 +10,12 @@
             <RadzenHeader>
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
                     <RadzenSidebarToggle Click="@(() => SideBarExpanded = !SideBarExpanded)"/>
-                    <RadzenLabel Text="Header"/>
+                    <RadzenLabel Text="Temasek Operatorr"/>
                 </RadzenStack>
             </RadzenHeader>
             <RadzenSidebar @bind-Expanded="@SideBarExpanded">
                 <RadzenPanelMenu>
-                    <RadzenPanelMenuItem Text="Home" Icon="home" Path="/"/>
+                    <RadzenPanelMenuItem Text="Home" Path="/"/>
                     <RadzenPanelMenuItem Text="HOTO" Path="/Hoto"/>
                     <RadzenPanelMenuItem Text="DC Dashboard" Path="/Clerk"/>
                 </RadzenPanelMenu>
