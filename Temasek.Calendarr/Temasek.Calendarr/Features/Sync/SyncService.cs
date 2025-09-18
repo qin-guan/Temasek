@@ -43,6 +43,8 @@ public class SyncService(
                 await calendarService.Events.Delete(options.Value.ChildCalendarId, @event.Id)
                     .ExecuteAsync(ct);
             }
+
+            await Task.Delay(1000, ct);
         }
     }
 }
