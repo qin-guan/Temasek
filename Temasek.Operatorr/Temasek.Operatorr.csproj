@@ -1,22 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Radzen.Blazor" Version="*"/>
-        <PackageReference Include="SqlSugarCore" Version="5.1.4.202"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8"/>
+        <PackageReference Include="Radzen.Blazor" Version="7.4.2" />
+        <PackageReference Include="SqlSugarCore" Version="5.1.4.206-preview01" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.0-rc.1.25451.107" />
     </ItemGroup>
 
     <ItemGroup>
         <Content Include="..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Pages\Hoto\Hoto.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Components\Components\" />
     </ItemGroup>
 
 </Project>

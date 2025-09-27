@@ -76,7 +76,7 @@ jobs:
             podman stop temasek-operatorr;
             podman rm temasek-operatorr;
             podman pull ghcr.io/qin-guan/temasek-operatorr:main;
-            podman run -d \
+            podman run -d --restart=unless-stopped \
             	--name temasek-operatorr \
             	-p 8002:8080 \
             	-e ASPNETCORE_FORWARDEDHEADERS_ENABLED="true" \

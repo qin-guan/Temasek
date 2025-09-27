@@ -76,7 +76,7 @@ jobs:
             podman stop temasek-calendarr;
             podman rm temasek-calendarr;
             podman pull ghcr.io/qin-guan/temasek-calendarr:main;
-            podman run -d \
+            podman run -d --restart=unless-stopped \
             	--name temasek-calendarr \
             	-p 8001:8080 \
             	-e Sync__ServiceAccountJsonCredential="${{ secrets.SYNC_SERVICE_ACCOUNT_JSON_CREDENTIALS }}" \

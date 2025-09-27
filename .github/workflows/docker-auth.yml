@@ -76,7 +76,7 @@ jobs:
             podman stop temasek-auth;
             podman rm temasek-auth;
             podman pull ghcr.io/qin-guan/temasek-auth:main;
-            podman run -d \
+            podman run -d --restart=unless-stopped \
             	--name temasek-auth \
             	-p 8000:8080 \
             	-e ConnectionStrings__Default="DataSource=app.db" \
