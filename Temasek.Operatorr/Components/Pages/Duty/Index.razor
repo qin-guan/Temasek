@@ -1,0 +1,40 @@
+@page "/Duty"
+@using SqlSugar
+@using Temasek.Operatorr.Components.Components
+@using Temasek.Operatorr.Entities
+
+@attribute [StreamRendering]
+
+@inject ISqlSugarClient SqlClient
+@inject NavigationManager Navigation
+
+<RadzenStack>
+    <RadzenRow class="rz-mt-6">
+        <RadzenColumn Size="12" SizeMD="4">
+            <DutyClerkCard Title="Duty Clerk" UserId="@Dc?.UserId" Phone="@Dc?.Phone"></DutyClerkCard>
+        </RadzenColumn>
+
+        <RadzenColumn Size="12" SizeMD="4">
+            <DutyClerkCard Title="CDOO" UserId="@Cdoo?.UserId" Phone="@Cdoo?.Phone"></DutyClerkCard>
+        </RadzenColumn>
+
+        <RadzenColumn Size="12" SizeMD="4">
+            <DutyClerkCard Title="CDOS" UserId="@Cdos?.UserId" Phone="@Cdos?.Phone"></DutyClerkCard>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenStack>
+
+@code {
+
+    public ClerkShiftRecord? Dc { get; set; }
+    public OfficerShiftRecord? Cdoo { get; set; }
+    public SpecShiftRecord? Cdos { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Dc = await SqlClient.Queryable<ClerkShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+        Cdoo = await SqlClient.Queryable<OfficerShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+        Cdos = await SqlClient.Queryable<SpecShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+    }
+
+}

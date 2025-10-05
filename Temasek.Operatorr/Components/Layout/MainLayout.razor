@@ -1,40 +1,22 @@
-﻿@inherits LayoutComponentBase
+﻿@using Temasek.Operatorr.Services
+@inherits LayoutComponentBase
+@inject ThemeService Theme
 
 <AuthorizeView>
-    <NotAuthorized>
-        <RedirectToLogin/>
-    </NotAuthorized>
-    <Authorized>
-        <RadzenComponents @rendermode="InteractiveAuto"/>
-        <RadzenLayout>
-            <RadzenHeader>
-                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-                    <RadzenSidebarToggle Click="@(() => SideBarExpanded = !SideBarExpanded)"/>
-                    <RadzenLabel Text="Temasek Operatorr"/>
-                </RadzenStack>
-            </RadzenHeader>
-            <RadzenSidebar @bind-Expanded="@SideBarExpanded">
-                <RadzenPanelMenu>
-                    <RadzenPanelMenuItem Text="Home" Path="/"/>
-                    <RadzenPanelMenuItem Text="HOTO" Path="/Hoto"/>
-                    <RadzenPanelMenuItem Text="DC Dashboard" Path="/Clerk"/>
-                </RadzenPanelMenu>
-            </RadzenSidebar>
-            <RadzenBody>
-                @Body
-            </RadzenBody>
-        </RadzenLayout>
-    </Authorized>
+  <NotAuthorized>
+    <RedirectToLogin/>
+  </NotAuthorized>
+  <Authorized>
+    <BootstrapBlazorRoot>
+      <div class="page">
+        <MainLayoutHeader UserName="@context.User.Identity?.Name"/>
+      </div>
+    </BootstrapBlazorRoot>
+  </Authorized>
 </AuthorizeView>
 
 <div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
+  An unhandled error has occurred.
+  <a href="." class="reload">Reload</a>
+  <span class="dismiss">🗙</span>
 </div>
-
-@code {
-
-    public bool SideBarExpanded = true;
-
-}

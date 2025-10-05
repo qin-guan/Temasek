@@ -8,8 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Radzen.Blazor" Version="7.4.2" />
-        <PackageReference Include="SqlSugarCore" Version="5.1.4.206-preview01" />
+        <PackageReference Include="BootstrapBlazor" Version="9.11.1-beta01" />
+        <PackageReference Include="BootstrapBlazor.DockView" Version="9.1.19" />
+        <PackageReference Include="BootstrapBlazor.FontAwesome" Version="9.1.1" />
+        <PackageReference Include="SqlSugarCore" Version="5.1.4.206-preview06" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.0-rc.1.25451.107" />
     </ItemGroup>
 
@@ -18,13 +20,4 @@
             <Link>.dockerignore</Link>
         </Content>
     </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="Components\Pages\Hoto\Hoto.razor" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Components\Components\" />
-    </ItemGroup>
-
 </Project>

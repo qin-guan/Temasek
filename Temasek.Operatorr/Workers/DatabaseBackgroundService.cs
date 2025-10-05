@@ -19,7 +19,8 @@ public class DatabaseBackgroundService(IServiceProvider sp) : BackgroundService
             await client.Insertable(new ClerkShiftRecord
             {
                 Start = DateTimeOffset.Now,
-                UserId = "XXX"
+                UserId = "XXX",
+                Phone = "8888 8888"
             }).ExecuteCommandAsync(stoppingToken);
         }
         
@@ -28,7 +29,8 @@ public class DatabaseBackgroundService(IServiceProvider sp) : BackgroundService
             await client.Insertable(new OfficerShiftRecord()
             {
                 Start = DateTimeOffset.Now,
-                UserId = "XXX"
+                UserId = "XXX",
+                Phone = "8888 8888"
             }).ExecuteCommandAsync(stoppingToken);
         }
         
@@ -37,7 +39,8 @@ public class DatabaseBackgroundService(IServiceProvider sp) : BackgroundService
             await client.Insertable(new SpecShiftRecord()
             {
                 Start = DateTimeOffset.Now,
-                UserId = "XXX"
+                UserId = "XXX",
+                Phone = "8888 8888"
             }).ExecuteCommandAsync(stoppingToken);
         }
     }
