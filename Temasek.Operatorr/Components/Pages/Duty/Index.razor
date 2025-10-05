@@ -3,38 +3,48 @@
 @using Temasek.Operatorr.Components.Components
 @using Temasek.Operatorr.Entities
 
-@attribute [StreamRendering]
-
 @inject ISqlSugarClient SqlClient
 @inject NavigationManager Navigation
 
-<RadzenStack>
-    <RadzenRow class="rz-mt-6">
-        <RadzenColumn Size="12" SizeMD="4">
-            <DutyClerkCard Title="Duty Clerk" UserId="@Dc?.UserId" Phone="@Dc?.Phone"></DutyClerkCard>
-        </RadzenColumn>
+<div class="page-header d-print-none" aria-label="Page header">
+  <div class="container-xl">
+    <div class="row g-2 align-items-center">
+      <div class="col">
+        <div class="page-pretitle">Overview</div>
+        <h2 class="page-title">3 SIB Duty Personnel</h2>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <RadzenColumn Size="12" SizeMD="4">
-            <DutyClerkCard Title="CDOO" UserId="@Cdoo?.UserId" Phone="@Cdoo?.Phone"></DutyClerkCard>
-        </RadzenColumn>
-
-        <RadzenColumn Size="12" SizeMD="4">
-            <DutyClerkCard Title="CDOS" UserId="@Cdos?.UserId" Phone="@Cdos?.Phone"></DutyClerkCard>
-        </RadzenColumn>
-    </RadzenRow>
-</RadzenStack>
+<div class="page-body">
+  <div class="container-xl">
+    <Card>
+      <BodyTemplate>
+        <Tab>
+          <TabItem Text="User">
+            <div>I am a user manager</div>
+          </TabItem>
+          <TabItem Text="User2">
+            <div>I am a user manager</div>
+          </TabItem>
+        </Tab>
+      </BodyTemplate>
+    </Card>
+  </div>
+</div>
 
 @code {
 
-    public ClerkShiftRecord? Dc { get; set; }
-    public OfficerShiftRecord? Cdoo { get; set; }
-    public SpecShiftRecord? Cdos { get; set; }
+  public ClerkShiftRecord? Dc { get; set; }
+  public OfficerShiftRecord? Cdoo { get; set; }
+  public SpecShiftRecord? Cdos { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        Dc = await SqlClient.Queryable<ClerkShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
-        Cdoo = await SqlClient.Queryable<OfficerShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
-        Cdos = await SqlClient.Queryable<SpecShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
-    }
+  protected override async Task OnInitializedAsync()
+  {
+    Dc = await SqlClient.Queryable<ClerkShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+    Cdoo = await SqlClient.Queryable<OfficerShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+    Cdos = await SqlClient.Queryable<SpecShiftRecord>().OrderByDescending(c => c.Start).FirstAsync();
+  }
 
 }

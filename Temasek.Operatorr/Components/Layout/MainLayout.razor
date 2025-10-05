@@ -10,6 +10,9 @@
     <BootstrapBlazorRoot>
       <div class="page">
         <MainLayoutHeader UserName="@context.User.Identity?.Name"/>
+        <div class="page-wrapper">
+          @Body
+        </div>
       </div>
     </BootstrapBlazorRoot>
   </Authorized>
