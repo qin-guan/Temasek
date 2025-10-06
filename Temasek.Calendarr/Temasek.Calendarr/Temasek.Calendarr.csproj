@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
         <ProjectReference Include="..\Temasek.Calendarr.Client\Temasek.Calendarr.Client.csproj"/>
         <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3746"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.0-rc.1.25451.107" />

@@ -14,6 +14,8 @@ using Temasek.Calendarr.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Services.AddSingleton<InMemoryLogService>();
 builder.Services.AddSingleton<SyncService>();
 builder.Services.AddSingleton<ILoggerProvider, InMemoryLoggerProvider>();
@@ -82,6 +84,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHostedService<IncrementalSyncBackgroundService>();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -22,4 +22,8 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
+    </ItemGroup>
+
 </Project>
