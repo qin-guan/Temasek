@@ -17,3 +17,9 @@
       context: .
       dockerfile: Temasek.Calendarr/Temasek.Calendarr.Client/Dockerfile
 
+  temasek.operatorr:
+    image: temasek.operatorr
+    build:
+      context: .
+      dockerfile: Temasek.Operatorr/Temasek.Operatorr/Dockerfile
+

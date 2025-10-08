@@ -17,6 +17,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Temasek.Auth\Temasek.Auth.csproj" />
       <ProjectReference Include="..\Temasek.Calendarr\Temasek.Calendarr\Temasek.Calendarr.csproj" />
+      <ProjectReference Include="..\Temasek.Operatorr\Temasek.Operatorr\Temasek.Operatorr.csproj" />
     </ItemGroup>
 
 </Project>
