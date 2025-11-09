@@ -23,6 +23,7 @@ public class OpenIddictBackgroundService(IServiceProvider serviceProvider, IOpti
             {
                 ClientType = OpenIddictConstants.ClientTypes.Public,
                 ClientId = clientOptions.ClientId,
+                ClientSecret = clientOptions.ClientSecret,
                 Permissions =
                 {
                     OpenIddictConstants.Permissions.Endpoints.Authorization,
