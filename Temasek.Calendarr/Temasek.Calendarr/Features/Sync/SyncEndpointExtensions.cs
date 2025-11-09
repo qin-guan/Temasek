@@ -1,7 +1,3 @@
-using Google.Apis.Calendar.v3;
-using Microsoft.Extensions.Options;
-using Temasek.Calendarr.Options;
-
 namespace Temasek.Calendarr.Features.Sync;
 
 public static class SyncEndpointExtensions

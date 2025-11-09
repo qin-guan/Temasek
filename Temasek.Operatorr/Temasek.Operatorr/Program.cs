@@ -1,15 +1,73 @@
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Dm.util;
+using FastEndpoints;
+using FastEndpoints.ClientGen.Kiota;
+using FastEndpoints.Swagger;
+using Kiota.Builder;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using SqlSugar;
+using Temasek.Operatorr.Entities;
+using Temasek.Operatorr.Extensions;
+using Temasek.Operatorr.Workers;
+using Temasek.ServiceDefaults;
 
-var builder = WebApplication.CreateSlimBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureHttpJsonOptions(options =>
+builder.AddServiceDefaults();
+
+builder.Services
+    .AddFastEndpoints()
+    .SwaggerDocument(o => { o.DocumentSettings = s => s.DocumentName = "v1"; });
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton<ISqlSugarClient>((sp) =>
 {
-    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+    var sqlSugar = new SqlSugarScope(new ConnectionConfig
+    {
+        DbType = DbType.Sqlite,
+        ConnectionString = "DataSource=app.db",
+        IsAutoCloseConnection = true,
+    });
+    
+    return sqlSugar;
 });
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+#region Auth
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    })
+    .AddOpenIdConnect(options =>
+    {
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+        options.Authority = "https://temasek-auth.from.sg";
+        options.ClientId = "operatorr";
+
+        options.GetClaimsFromUserInfoEndpoint = true;
+        options.ResponseType = OpenIdConnectResponseType.Code;
+
+        options.TokenValidationParameters.NameClaimType = "given_name";
+        options.TokenValidationParameters.RoleClaimType = "roles";
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+
+builder.Services.ConfigureCookieOidc(
+    CookieAuthenticationDefaults.AuthenticationScheme,
+    OpenIdConnectDefaults.AuthenticationScheme
+);
+
+builder.Services.AddAuthorization();
+
+#endregion
+
+builder.Services.AddHostedService<DatabaseBackgroundService>();
 
 var app = builder.Build();
 
@@ -20,30 +78,17 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-Todo[] sampleTodos =
-[
-    new(1, "Walk the dog"),
-    new(2, "Do the dishes", DateOnly.FromDateTime(DateTime.Now)),
-    new(3, "Do the laundry", DateOnly.FromDateTime(DateTime.Now.AddDays(1))),
-    new(4, "Clean the bathroom"),
-    new(5, "Clean the car", DateOnly.FromDateTime(DateTime.Now.AddDays(2)))
-];
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseFastEndpoints();
 
-var todosApi = app.MapGroup("/todos");
-todosApi.MapGet("/", () => sampleTodos)
-    .WithName("GetTodos");
-
-todosApi.MapGet("/{id}", Results<Ok<Todo>, NotFound> (int id) =>
-        sampleTodos.FirstOrDefault(a => a.Id == id) is { } todo
-            ? TypedResults.Ok(todo)
-            : TypedResults.NotFound())
-    .WithName("GetTodoById");
+await app.GenerateApiClientsAndExitAsync(c =>
+{
+    c.SwaggerDocumentName = "v1";
+    c.Language = GenerationLanguage.TypeScript;
+    c.OutputPath = Path.Join(app.Environment.ContentRootPath, "..", "Temasek.Operatorr.Client", "api");
+    c.ClientNamespaceName = "Operatorr";
+    c.ClientClassName = "ApiClient";
+});
 
 app.Run();
-
-public record Todo(int Id, string? Title, DateOnly? DueBy = null, bool IsComplete = false);
-
-[JsonSerializable(typeof(Todo[]))]
-internal partial class AppJsonSerializerContext : JsonSerializerContext
-{
-}

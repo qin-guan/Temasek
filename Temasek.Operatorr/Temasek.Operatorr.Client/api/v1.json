@@ -1,0 +1,74 @@
+{
+  "x-generator": "NSwag v14.5.0.0 (NJsonSchema v11.4.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Temasek.Operatorr",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/DutyShift": {
+      "get": {
+        "tags": [
+          "Dutyshift"
+        ],
+        "operationId": "TemasekOperatorrFeaturesDutyShiftListEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemasekOperatorrFeaturesDutyShiftListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TemasekOperatorrFeaturesDutyShiftListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dcId": {
+            "type": "string"
+          },
+          "dcName": {
+            "type": "string"
+          },
+          "cdooId": {
+            "type": "string"
+          },
+          "cdooName": {
+            "type": "string"
+          },
+          "cdosId": {
+            "type": "string"
+          },
+          "cdosName": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWTBearerAuth": {
+        "type": "http",
+        "description": "Enter a JWT token to authorize the requests...",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

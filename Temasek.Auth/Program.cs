@@ -6,6 +6,7 @@ using Temasek.Auth.Data;
 using Temasek.Auth.Features;
 using Temasek.Auth.Options;
 using Temasek.Auth.Workers;
+using Temasek.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -11,6 +11,7 @@ using Temasek.Calendarr.Components;
 using Temasek.Calendarr.Extensions;
 using Temasek.Calendarr.Features.Sync;
 using Temasek.Calendarr.Options;
+using Temasek.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 

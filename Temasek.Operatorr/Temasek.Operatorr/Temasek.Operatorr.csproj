@@ -5,24 +5,32 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <PublishAot>true</PublishAot>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.0-rc.1.25451.107" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107"/>
-        <PackageReference Include="SqlSugarCore" Version="5.1.4.206-preview10" />
+        <PackageReference Include="FastEndpoints" Version="7.1.0" />
+        <PackageReference Include="FastEndpoints.ClientGen.Kiota" Version="7.1.0" />
+        <PackageReference Include="FastEndpoints.Swagger" Version="7.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.0-rc.2.25502.107" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.2.25502.107" />
+        <PackageReference Include="SqlSugarCore" Version="5.1.4.208-preview18" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj"/>
     </ItemGroup>
+    
+    <Target Name="ClientGen" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
+        <Exec WorkingDirectory="$(RunWorkingDirectory)"
+              Command="$(RunCommand) --generateclients true --urls http://127.0.0.1:0"
+        />
+    </Target>
 
 </Project>

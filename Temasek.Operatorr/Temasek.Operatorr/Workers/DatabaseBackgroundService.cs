@@ -10,37 +10,33 @@ public class DatabaseBackgroundService(IServiceProvider sp) : BackgroundService
         await using var scope = sp.CreateAsyncScope();
         var client = scope.ServiceProvider.GetRequiredService<ISqlSugarClient>();
         client.DbMaintenance.CreateDatabase();
-        client.CodeFirst.InitTables<ClerkShiftRecord>();
-        client.CodeFirst.InitTables<OfficerShiftRecord>();
-        client.CodeFirst.InitTables<SpecShiftRecord>();
         
-        if (!await client.Queryable<ClerkShiftRecord>().AnyAsync(stoppingToken))
+        client.CodeFirst.InitTables<ShiftRecord>();
+
+        if (!await client.Queryable<ShiftRecord>().AnyAsync(stoppingToken))
         {
-            await client.Insertable(new ClerkShiftRecord
+            await client.Insertable(new ShiftRecord
             {
-                Start = DateTimeOffset.Now,
+                Start = DateTimeOffset.UtcNow,
+                UserName = "Qin Guan",
                 UserId = "XXX",
-                Phone = "8888 8888"
+                UserPhone = "8888 8888"
             }).ExecuteCommandAsync(stoppingToken);
-        }
-        
-        if (!await client.Queryable<OfficerShiftRecord>().AnyAsync(stoppingToken))
-        {
-            await client.Insertable(new OfficerShiftRecord()
+            
+            await client.Insertable(new ShiftRecord
             {
-                Start = DateTimeOffset.Now,
+                Start = DateTimeOffset.UtcNow,
+                UserName = "Qin Guan",
                 UserId = "XXX",
-                Phone = "8888 8888"
+                UserPhone = "8888 8888"
             }).ExecuteCommandAsync(stoppingToken);
-        }
-        
-        if (!await client.Queryable<SpecShiftRecord>().AnyAsync(stoppingToken))
-        {
-            await client.Insertable(new SpecShiftRecord()
+            
+            await client.Insertable(new ShiftRecord
             {
-                Start = DateTimeOffset.Now,
+                Start = DateTimeOffset.UtcNow,
+                UserName = "Qin Guan",
                 UserId = "XXX",
-                Phone = "8888 8888"
+                UserPhone = "8888 8888"
             }).ExecuteCommandAsync(stoppingToken);
         }
     }
