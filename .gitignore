@@ -7,3 +7,4 @@ riderModule.iml
 *.db
 *.sqlite
 *.DotSettings.user
+node_modules/

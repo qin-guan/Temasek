@@ -1,0 +1,3 @@
+packages:
+  - Temasek.Operatorr/Temasek.Operatorr.Client
+  - Temasek.Auth/Temasek.Auth.Client

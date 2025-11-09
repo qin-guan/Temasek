@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <UserSecretsId>6bedb35f-ab2a-4bbf-8222-75bfa2f60148</UserSecretsId>
+        <RootNamespace>Temasek.Auth</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
+      <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
     </ItemGroup>
 
 </Project>
