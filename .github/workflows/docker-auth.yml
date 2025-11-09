@@ -91,7 +91,7 @@ jobs:
                     -e OpenIddict__Clients__2__RedirectUris__1="https://localhost:7215/signin-oidc" \
                     -e OpenIddict__Clients__3__ClientId="clerk" \
                     -e OpenIddict__Clients__3__ClientSecret="abc123" \
-                    -e OpenIddict__Clients__3__RedirectUris__1="https://localhost:7215/signin-oidc" \
+                    -e OpenIddict__Clients__3__RedirectUris__1="https://tolerant-molly-48.clerk.accounts.dev/v1/oauth_callback" \
             	-e FormGovSg__CallbackApiKey="${{ secrets.AUTH_FORMSG_CALLBACK_API_KEY }}" \
             	-e ASPNETCORE_FORWARDEDHEADERS_ENABLED="true" \
             	ghcr.io/qin-guan/temasek-auth:main;
