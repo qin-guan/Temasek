@@ -11,11 +11,11 @@ COPY ["Temasek.Auth/Temasek.Auth/Temasek.Auth.csproj", "Temasek.Auth/Temasek.Aut
 RUN dotnet restore "Temasek.Auth/Temasek.Auth/Temasek.Auth.csproj"
 COPY . .
 WORKDIR "/src/Temasek.Auth"
-RUN dotnet build "./Temasek.Auth/Temasek.Auth/Temasek.Auth.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./Temasek.Auth/Temasek.Auth.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Temasek.Auth/Temasek.Auth/Temasek.Auth.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Temasek.Auth/Temasek.Auth.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
