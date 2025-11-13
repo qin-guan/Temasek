@@ -27,10 +27,10 @@
         <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj"/>
     </ItemGroup>
     
-    <Target Name="ClientGen" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
-        <Exec WorkingDirectory="$(RunWorkingDirectory)"
-              Command="$(RunCommand) --generateclients true --urls http://127.0.0.1:0"
-        />
-    </Target>
+<!--    <Target Name="ClientGen" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">-->
+<!--        <Exec WorkingDirectory="$(RunWorkingDirectory)"-->
+<!--              Command="$(RunCommand) &#45;&#45;generateclients true &#45;&#45;urls http://127.0.0.1:0"-->
+<!--        />-->
+<!--    </Target>-->
 
 </Project>
