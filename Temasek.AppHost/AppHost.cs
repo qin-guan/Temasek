@@ -6,7 +6,7 @@ var formSgSecretKey = builder.AddParameter("formsg-secret-key", secret: true);
 var formSgCallbackApiKey = builder.AddParameter("formsg-callback-api-key", secret: true);
 
 var auth = builder.AddProject<Projects.Temasek_Auth>("temasek-auth")
-    .WithEnvironment("FormSg:CallbackApiKey", formSgSecretKey)
+    .WithEnvironment("FormSg:CallbackApiKey", formSgCallbackApiKey)
     .WithEnvironment("FormSg:SecretKey", formSgSecretKey)
     .WithEnvironment("Clerk:SecretKey", clerkSecretKey);
 

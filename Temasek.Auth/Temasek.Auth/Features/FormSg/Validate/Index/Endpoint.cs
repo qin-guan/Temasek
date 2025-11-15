@@ -10,6 +10,8 @@ namespace Temasek.Auth.Features.FormSg.Validate.Index;
 
 public class Endpoint(IOptions<FormSgOptions> formSgOptions) : EndpointWithoutRequest<Response>
 {
+    public const string Issuer = "Temasek.Auth.Features.FormSg.Validate";
+
     private readonly byte[] secretKeyBytes = Encoding.UTF8.GetBytes(formSgOptions.Value.SecretKey);
 
     public override void Configure()
@@ -21,7 +23,7 @@ public class Endpoint(IOptions<FormSgOptions> formSgOptions) : EndpointWithoutRe
     {
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Issuer = nameof(Endpoint),
+            Issuer = Issuer,
             Subject = User.Identities.First(),
             Expires = DateTime.UtcNow.AddMinutes(15),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha256Signature)

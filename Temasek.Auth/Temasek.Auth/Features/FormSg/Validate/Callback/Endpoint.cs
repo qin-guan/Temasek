@@ -1,15 +1,18 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Clerk.BackendAPI;
 using FastEndpoints;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Temasek.Auth.Options;
 
 namespace Temasek.Auth.Features.FormSg.Validate.Callback;
 
-public class Endpoint(IOptions<FormSgOptions> formSgOptions, ClerkBackendApi clerk) : Endpoint<Request>
+public class Endpoint(ILogger<Endpoint> logger, IOptions<FormSgOptions> formSgOptions, ClerkBackendApi clerk) : Endpoint<Request>
 {
    private readonly byte[] secretKeyBytes = Encoding.UTF8.GetBytes(formSgOptions.Value.SecretKey);
 
@@ -31,13 +34,28 @@ public class Endpoint(IOptions<FormSgOptions> formSgOptions, ClerkBackendApi cle
 
       var principal = await tokenHandler.ValidateTokenAsync(req.ClerkUserId, new TokenValidationParameters
       {
-         ValidIssuer = nameof(Index.Endpoint),
-         ValidateIssuer = true,
+         // I don't think this would cause any security issues since we only need to get the data
+         ValidateAudience = false,
+         ValidIssuer = Index.Endpoint.Issuer,
          ValidateLifetime = true,
          IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes)
       });
 
-      var userId = principal.ClaimsIdentity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+      if (principal.IsValid == false)
+      {
+         logger.LogWarning("Failed to verify Clerk User ID token: {Message}", principal.Exception.Message);
+         await Send.ForbiddenAsync(ct);
+         return;
+      }
+
+      var userId = principal.ClaimsIdentity.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+      if (userId is null)
+      {
+         logger.LogWarning("Clerk User ID token does not contain NameIdentifier claim");
+         await Send.ForbiddenAsync(cancellation: ct);
+         return;
+      }
+
       var user = await clerk.Users.GetAsync(userId);
 
       await clerk.Users.UpdateMetadataAsync(userId, new Clerk.BackendAPI.Models.Operations.UpdateUserMetadataRequestBody
@@ -49,6 +67,6 @@ public class Endpoint(IOptions<FormSgOptions> formSgOptions, ClerkBackendApi cle
         }
       });
 
-      await Send.OkAsync(ct);
+      await Send.OkAsync(cancellation: ct);
    }
 }
