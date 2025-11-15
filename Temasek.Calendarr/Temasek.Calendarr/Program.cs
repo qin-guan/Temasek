@@ -1,8 +1,51 @@
+using System.Text;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Services;
+using Microsoft.Extensions.Options;
+using Temasek.Calendarr.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddKeyedSingleton<CalendarService>("Sync", (sp, _) =>
+{
+    var options = sp.GetRequiredService<IOptions<SyncOptions>>();
+    var s = Convert.FromBase64String(options.Value.ServiceAccountJsonCredential);
+
+    var credential = GoogleCredential.FromJson(Encoding.UTF8.GetString(s)).CreateScoped(
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.events"
+    );
+    
+    var service = new CalendarService(new BaseClientService.Initializer
+    {
+        HttpClientInitializer = credential
+    });
+
+    return service;
+});
+
+builder.Services.AddKeyedSingleton<CalendarService>("BdeComd", (sp, _) =>
+{
+    var options = sp.GetRequiredService<IOptions<SyncOptions>>();
+    var s = Convert.FromBase64String(options.Value.BdeComdServiceAccountJsonCredential);
+
+    var credential = GoogleCredential.FromJson(Encoding.UTF8.GetString(s)).CreateScoped(
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.events"
+    );
+    
+    var service = new CalendarService(new BaseClientService.Initializer
+    {
+        HttpClientInitializer = credential
+    });
+
+    return service;
+});
 
 var app = builder.Build();
 
