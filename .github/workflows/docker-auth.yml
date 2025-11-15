@@ -79,6 +79,7 @@ jobs:
             podman run -d --restart=unless-stopped \
             	--name temasek-auth \
             	-p 8000:8080 \
+            	-e FormSg__CallbackApiKey="${{ secrets.AUTH_FORMSG_CALLBACK_API_KEY }}" \
             	-e FormSg__SecretKey="${{ secrets.AUTH_FORMSG_SECRET_KEY }}" \
             	-e Clerk__SecretKey="${{ secrets.AUTH_CLERK_SECRET_KEY }}" \
             	-e ASPNETCORE_FORWARDEDHEADERS_ENABLED="true" \

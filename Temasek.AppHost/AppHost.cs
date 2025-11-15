@@ -2,8 +2,14 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var clerkPublishableKey = builder.AddParameter("clerk-publishable-key");
 var clerkSecretKey = builder.AddParameter("clerk-secret-key", secret: true);
+var formSgSecretKey = builder.AddParameter("formsg-secret-key", secret: true);
+var formSgCallbackApiKey = builder.AddParameter("formsg-callback-api-key", secret: true);
 
-var auth = builder.AddProject<Projects.Temasek_Auth>("temasek-auth");
+var auth = builder.AddProject<Projects.Temasek_Auth>("temasek-auth")
+    .WithEnvironment("FormSg:CallbackApiKey", formSgSecretKey)
+    .WithEnvironment("FormSg:SecretKey", formSgSecretKey)
+    .WithEnvironment("Clerk:SecretKey", clerkSecretKey);
+
 builder.AddJavaScriptApp("temasek-auth-client", "../Temasek.Auth/Temasek.Auth.Client")
     .WithNpm(false)
     .WithEnvironment("NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY", clerkPublishableKey)

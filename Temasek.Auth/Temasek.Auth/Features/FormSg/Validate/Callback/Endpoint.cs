@@ -21,6 +21,12 @@ public class Endpoint(IOptions<FormSgOptions> formSgOptions, ClerkBackendApi cle
 
    public override async Task HandleAsync(Request req, CancellationToken ct)
    {
+      if (HttpContext.Request.Headers["X-API-KEY"] != formSgOptions.Value.CallbackApiKey)
+      {
+         await Send.UnauthorizedAsync(ct);
+         return;
+      }
+
       var tokenHandler = new JwtSecurityTokenHandler();
 
       var principal = await tokenHandler.ValidateTokenAsync(req.ClerkUserId, new TokenValidationParameters
