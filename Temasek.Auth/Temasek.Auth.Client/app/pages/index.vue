@@ -60,6 +60,7 @@ async function verifyAccount() {
         v-if="!isLoaded"
         class="h-10 w-full"
       />
+
       <UAlert
         v-else-if="!user?.publicMetadata['nric']"
         color="warning"
@@ -74,6 +75,45 @@ async function verifyAccount() {
           },
         ]"
       />
+
+      <UPageCard
+        v-else
+        color="success"
+        variant="subtle"
+        icon="i-lucide-check"
+        title="Your account has been verified!"
+        description="As a member of the Temasek family, you now have access to all features!"
+      >
+        <div class="space-y-3">
+          <div class="flex flex-wrap gap-3">
+            <UFormField label="Name">
+              <UInput
+                disabled
+                :value="user.publicMetadata['name']"
+              />
+            </UFormField>
+
+            <UFormField label="NRIC">
+              <UInput
+                disabled
+                :value="user.publicMetadata['nric']"
+              />
+            </UFormField>
+          </div>
+
+          <div class="flex gap-3 flex-wrap items-center">
+            <UButton
+              variant="subtle"
+              @click="verifyAccount"
+            >
+              Re-verify account
+            </UButton>
+            <p class="text-muted text-sm">
+              Re-verify your status at any time!
+            </p>
+          </div>
+        </div>
+      </UPageCard>
 
       <UPageGrid>
         <UPageCard
