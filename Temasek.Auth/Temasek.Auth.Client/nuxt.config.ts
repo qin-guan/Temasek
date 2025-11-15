@@ -24,6 +24,21 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-07-15',
 
+  nitro: {
+    cloudflare: {
+      deployConfig: true,
+      wrangler: {
+        observability: {
+          logs: {
+            enabled: true,
+            head_sampling_rate: 1,
+            invocation_logs: true,
+          },
+        },
+      },
+    },
+  },
+
   clerk: {
     appearance: {
       theme: dark,
