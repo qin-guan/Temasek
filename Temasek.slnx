@@ -2,10 +2,9 @@
   <Folder Name="/Solution Items/">
     <File Path="compose.yaml" />
   </Folder>
-  <Project Path="Temasek.AppHost\Temasek.AppHost.csproj" Type="Classic C#" />
-  <Project Path="Temasek.Auth\Temasek.Auth\Temasek.Auth.csproj" />
-  <Project Path="Temasek.Calendarr\Temasek.Calendarr.Client\Temasek.Calendarr.Client.csproj" Type="Classic C#" />
-  <Project Path="Temasek.Calendarr\Temasek.Calendarr\Temasek.Calendarr.csproj" Type="Classic C#" />
-  <Project Path="Temasek.Operatorr\Temasek.Operatorr\Temasek.Operatorr.csproj" Type="Classic C#" />
-  <Project Path="Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" Type="Classic C#" />
+  <Project Path="Temasek.AppHost\Temasek.AppHost.csproj" Type="C#" />
+  <Project Path="Temasek.Auth\Temasek.Auth\Temasek.Auth.csproj" Type="C#" />
+  <Project Path="Temasek.Calendarr\Temasek.Calendarr\Temasek.Calendarr.csproj" Type="C#" />
+  <Project Path="Temasek.Operatorr\Temasek.Operatorr\Temasek.Operatorr.csproj" Type="C#" />
+  <Project Path="Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" Type="C#" />
 </Solution>

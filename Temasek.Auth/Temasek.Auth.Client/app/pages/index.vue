@@ -5,6 +5,14 @@ const runtimeConfig = useRuntimeConfig()
 
 const items: (PageCardProps & { id: string })[] = [
   {
+    id: 'facilities',
+    title: 'Facilities',
+    description: 'Book rooms and facilities',
+    icon: 'i-lucide-map',
+    to: 'https://3sib-fbs.from.sg',
+    target: '_blank',
+  },
+  {
     id: 'calendarr',
     title: 'Calendarr',
     description: 'Calendar sync and de-conflicting service',
