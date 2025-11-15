@@ -26,12 +26,7 @@ export default defineNuxtConfig({
 
   nitro: {
     cloudflare: {
-      deployConfig: true,
       wrangler: {
-        vars: {
-          NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY: '{{ NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}',
-          NUXT_CLERK_SECRET_KEY: '{{ NUXT_CLERK_SECRET_KEY }}',
-        },
         observability: {
           logs: {
             enabled: true,
