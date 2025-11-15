@@ -1,3 +1,6 @@
 {
-  "appHostPath": "../Temasek.AppHost/Temasek.AppHost.csproj"
+  "appHostPath": "../Temasek.AppHost/Temasek.AppHost.csproj",
+  "features": {
+    "defaultWatchEnabled": true
+  }
 }
