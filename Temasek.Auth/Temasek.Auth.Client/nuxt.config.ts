@@ -24,25 +24,6 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-07-15',
 
-  nitro: {
-    cloudflare: {
-      deployConfig: true,
-      wrangler: {
-        vars: {
-          NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY: '{{ NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}',
-          NUXT_CLERK_SECRET_KEY: '{{ NUXT_CLERK_SECRET_KEY }}',
-        },
-        observability: {
-          logs: {
-            enabled: true,
-            head_sampling_rate: 1,
-            invocation_logs: true,
-          },
-        },
-      },
-    },
-  },
-
   clerk: {
     appearance: {
       theme: dark,
