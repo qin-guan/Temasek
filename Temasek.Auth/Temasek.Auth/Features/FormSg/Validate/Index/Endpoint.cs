@@ -8,7 +8,7 @@ using Temasek.Auth.Options;
 
 namespace Temasek.Auth.Features.FormSg.Validate.Index;
 
-public class Endpoint(IOptions<FormSgOptions> formSgOptions) : EndpointWithoutRequest
+public class Endpoint(IOptions<FormSgOptions> formSgOptions) : EndpointWithoutRequest<Response>
 {
     private readonly byte[] secretKeyBytes = Encoding.UTF8.GetBytes(formSgOptions.Value.SecretKey);
 
@@ -29,6 +29,11 @@ public class Endpoint(IOptions<FormSgOptions> formSgOptions) : EndpointWithoutRe
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
-        await Send.RedirectAsync($"https://form.gov.sg/{formSgOptions.Value.FormId}?{formSgOptions.Value.PrefillFieldId}=" + tokenHandler.WriteToken(token), allowRemoteRedirects: true);
+        await Send.OkAsync(new Response
+        {
+            FormId = formSgOptions.Value.FormId,
+            PrefillFieldId = formSgOptions.Value.PrefillFieldId,
+            ClerkUserId = tokenHandler.WriteToken(token),
+        }, ct);
     }
 }

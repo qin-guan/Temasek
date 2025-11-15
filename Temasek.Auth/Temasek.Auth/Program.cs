@@ -17,6 +17,8 @@ builder.Services.AddOptions<FormSgOptions>()
 builder.Services.AddOptions<ClerkOptions>()
     .Bind(builder.Configuration.GetSection("Clerk"));
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services
     .AddFastEndpoints()
     .AddAuthorization()
@@ -27,7 +29,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins(builder.Environment.IsDevelopment() ? "http://localhost:3000" : "https://temasek-auth.from.sg")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -35,7 +37,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddOpenApi();
 
-builder.Services.AddSingleton(sp => new ClerkBackendApi(bearerAuth: sp.GetRequiredService<IOptions<ClerkOptions>>().Value.BearerToken));
+builder.Services.AddScoped(sp => new ClerkBackendApi(bearerAuth: sp.GetRequiredService<IOptions<ClerkOptions>>().Value.SecretKey));
 
 var app = builder.Build();
 

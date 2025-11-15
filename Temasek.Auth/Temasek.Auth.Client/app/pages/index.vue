@@ -20,18 +20,29 @@ const items: (PageCardProps & { id: string })[] = [
     to: 'https://temasek-operatorr.from.sg',
     target: '_blank',
   },
+  {
+    id: 'nameplates',
+    title: 'Nameplates',
+    description: 'Nameplate generator',
+    icon: 'i-lucide-user',
+    to: 'https://nameplates.from.sg',
+    target: '_blank',
+  },
 ]
 
 const { user, isLoaded } = useUser()
+const { getToken } = useAuth()
 
-onMounted(async () => {
-  await fetch(runtimeConfig.public.api + '/FormSg/Validate', {
+async function verifyAccount() {
+  const data = await $fetch<{ formId: string, prefillFieldId: string, clerkUserId: string }>(runtimeConfig.public.api + '/FormSg/Validate', {
     credentials: 'include',
     headers: {
-      Authorization: `Bearer ${await useAuth().getToken.value()}`,
+      Authorization: `Bearer ${await getToken.value()}`,
     },
   })
-})
+  const url = `https://form.gov.sg/${data.formId}?${data.prefillFieldId}=${data.clerkUserId}`
+  await navigateTo(url, { external: true, open: { target: '_blank' } })
+}
 </script>
 
 <template>
@@ -59,7 +70,7 @@ onMounted(async () => {
         :actions="[
           {
             label: 'Verify now',
-            to: runtimeConfig.public.api + '/FormSg/Validate',
+            onClick: verifyAccount,
           },
         ]"
       />
