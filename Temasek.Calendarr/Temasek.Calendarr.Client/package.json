@@ -10,7 +10,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@clerk/nuxt": "^1.12.1",
+    "@clerk/themes": "^2.4.36",
+    "@microsoft/signalr": "^10.0.0",
     "@nuxt/eslint": "^1.10.0",
+    "@nuxt/fonts": "^0.12.1",
     "@nuxt/hints": "^1.0.0-alpha.1",
     "@nuxt/image": "^2.0.0",
     "@nuxt/scripts": "^0.13.0",
@@ -19,6 +23,7 @@
     "@unhead/vue": "^2.0.19",
     "eslint": "^9.39.1",
     "nuxt": "^4.2.1",
+    "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
     "vue": "^3.5.24",
     "vue-router": "^4.6.3"

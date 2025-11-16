@@ -3,24 +3,58 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Services;
 using Microsoft.Extensions.Options;
+using Polly;
+using Temasek.Calendarr.Hubs;
+using Temasek.Calendarr.Logger;
 using Temasek.Calendarr.Options;
+using Temasek.Calendarr.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOptions<SyncOptions>()
+    .Bind(builder.Configuration.GetSection("Sync"));
+
+builder.Services.AddResiliencePipeline("BackgroundService", options =>
+{
+    options
+        .AddRetry(new Polly.Retry.RetryStrategyOptions
+        {
+            Delay = TimeSpan.FromSeconds(10)
+        })
+        .AddTimeout(TimeSpan.FromMinutes(1));
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            policy.WithOrigins("http://localhost:3002");
+        }
+        else
+        {
+            policy.WithOrigins("https://temasek-calendarr.from.sg");
+        }
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+builder.Services.AddSignalR();
 builder.Services.AddOpenApi();
 
-builder.Services.AddKeyedSingleton<CalendarService>("Sync", (sp, _) =>
+builder.Services.AddKeyedSingleton("Sync", (sp, _) =>
 {
     var options = sp.GetRequiredService<IOptions<SyncOptions>>();
     var s = Convert.FromBase64String(options.Value.ServiceAccountJsonCredential);
 
-    var credential = GoogleCredential.FromJson(Encoding.UTF8.GetString(s)).CreateScoped(
+    var credential = CredentialFactory.FromJson<ServiceAccountCredential>(Encoding.UTF8.GetString(s));
+    credential.Scopes = [
         "https://www.googleapis.com/auth/calendar",
         "https://www.googleapis.com/auth/calendar.events"
-    );
-    
+    ];
+
     var service = new CalendarService(new BaseClientService.Initializer
     {
         HttpClientInitializer = credential
@@ -29,16 +63,17 @@ builder.Services.AddKeyedSingleton<CalendarService>("Sync", (sp, _) =>
     return service;
 });
 
-builder.Services.AddKeyedSingleton<CalendarService>("BdeComd", (sp, _) =>
+builder.Services.AddKeyedSingleton("BdeComd", (sp, _) =>
 {
     var options = sp.GetRequiredService<IOptions<SyncOptions>>();
     var s = Convert.FromBase64String(options.Value.BdeComdServiceAccountJsonCredential);
 
-    var credential = GoogleCredential.FromJson(Encoding.UTF8.GetString(s)).CreateScoped(
+    var credential = CredentialFactory.FromJson<ServiceAccountCredential>(Encoding.UTF8.GetString(s));
+    credential.Scopes = [
         "https://www.googleapis.com/auth/calendar",
         "https://www.googleapis.com/auth/calendar.events"
-    );
-    
+    ];
+
     var service = new CalendarService(new BaseClientService.Initializer
     {
         HttpClientInitializer = credential
@@ -47,7 +82,13 @@ builder.Services.AddKeyedSingleton<CalendarService>("BdeComd", (sp, _) =>
     return service;
 });
 
+
+builder.Services.AddSingleton<ILoggerProvider, SignalRLoggerProvider>();
+builder.Services.AddHostedService<SyncIncrementalBackgroundService>();
+
 var app = builder.Build();
+
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -57,28 +98,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapHub<LoggerHub>("/Hubs/Logger");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
