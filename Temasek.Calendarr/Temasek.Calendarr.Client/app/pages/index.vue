@@ -11,7 +11,7 @@ function prepend(value, array) {
 
 onMounted(() => {
   $signalr.on('ReceiveLog', (logLevel, category, message) => {
-    messages.value = prepend(`${category} ${message}`, messages.value)
+    messages.value = prepend(`[${category}] ${message}`, messages.value)
   })
 })
 </script>

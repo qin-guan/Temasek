@@ -8,7 +8,6 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Temasek.Calendarr/Temasek.Calendarr/Temasek.Calendarr.csproj", "Temasek.Calendarr/Temasek.Calendarr/"]
-COPY ["Temasek.Calendarr/Temasek.Calendarr.Client/Temasek.Calendarr.Client.csproj", "Temasek.Calendarr/Temasek.Calendarr.Client/"]
 RUN dotnet restore "Temasek.Calendarr/Temasek.Calendarr/Temasek.Calendarr.csproj"
 COPY . .
 WORKDIR "/src/Temasek.Calendarr/Temasek.Calendarr"
