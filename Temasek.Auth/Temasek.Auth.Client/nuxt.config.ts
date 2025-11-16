@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@clerk/nuxt',
   ],
+  ssr: false,
   devtools: { enabled: true },
 
   css: ['~/assets/css/main.css'],

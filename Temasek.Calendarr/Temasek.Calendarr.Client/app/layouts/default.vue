@@ -5,6 +5,8 @@ useHead({
   titleTemplate: title => (title ? `${title} - Calendarr` : 'Calendarr'),
 })
 
+const { isLoaded, isSignedIn } = useAuth()
+
 const open = ref(false)
 
 const links = [
@@ -61,7 +63,25 @@ const links = [
         </template>
       </UDashboardSidebar>
 
-      <slot />
+      <UDashboardPanel
+        v-if="!isLoaded"
+        id="layout-default"
+      >
+        <template #header>
+          <UDashboardNavbar>
+            <template #leading>
+              <UDashboardSidebarCollapse />
+            </template>
+          </UDashboardNavbar>
+        </template>
+        <template #body>
+          <UProgress />
+        </template>
+      </UDashboardPanel>
+
+      <RedirectToSignIn v-else-if="!isSignedIn" />
+
+      <slot v-else />
     </UDashboardGroup>
   </UMain>
 </template>

@@ -1,11 +1,12 @@
 <template>
   <UApp>
     <NuxtLayout>
-      <NuxtRouteAnnouncer/>
-      <NuxtPage/>
+      <NuxtRouteAnnouncer />
+      <NuxtPage />
     </NuxtLayout>
   </UApp>
 </template>
+
 <style>
 body {
   font-family: var(--font-display);

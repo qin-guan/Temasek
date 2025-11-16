@@ -5,6 +5,8 @@ useHead({
   titleTemplate: title => (title ? `${title} - Temasek` : 'Temasek'),
 })
 
+const { isLoaded, isSignedIn } = useAuth()
+
 const open = ref(false)
 
 const links = [
@@ -20,14 +22,6 @@ const links = [
     },
   ],
 ] satisfies NavigationMenuItem[][]
-
-const groups = computed(() => [
-  {
-    id: 'links',
-    label: 'Go to',
-    items: links.flat(),
-  },
-])
 </script>
 
 <template>
@@ -69,7 +63,25 @@ const groups = computed(() => [
         </template>
       </UDashboardSidebar>
 
-      <slot />
+      <UDashboardPanel
+        v-if="!isLoaded"
+        id="layout-default"
+      >
+        <template #header>
+          <UDashboardNavbar>
+            <template #leading>
+              <UDashboardSidebarCollapse />
+            </template>
+          </UDashboardNavbar>
+        </template>
+        <template #body>
+          <UProgress />
+        </template>
+      </UDashboardPanel>
+
+      <RedirectToSignIn v-else-if="!isSignedIn" />
+
+      <slot v-else />
     </UDashboardGroup>
   </UMain>
 </template>
