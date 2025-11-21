@@ -84,7 +84,7 @@ jobs:
             	-e Sync__ChildCalendarId="86b16e9c2f4c79989f18c731917a0abacc67157f16fd5614dd948df110ce6449@group.calendar.google.com" \
             	-e Sync__SyncInterval="0:0:10" \
             	-e BdeComd__TargetCalendarId="86b16e9c2f4c79989f18c731917a0abacc67157f16fd5614dd948df110ce6449@group.calendar.google.com" \
-            	-e BdeComd__SourceCalendarId="2b531a62ff8ded1715a9e3f5ffa29447ead31f4f46bbe7a1c23061ca6ec17c37@group.calendar.google.com"" \
+            	-e BdeComd__SourceCalendarId="2b531a62ff8ded1715a9e3f5ffa29447ead31f4f46bbe7a1c23061ca6ec17c37@group.calendar.google.com" \
             	-e BdeComd__SyncInterval="0:0:10" \
             	-e BdeComd__VocabPath="/app/publish/assets/vocab.txt" \
             	-e BdeComd__ModelPath="/app/publish/assets/model.onnx" \
