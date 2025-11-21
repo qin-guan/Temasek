@@ -23,7 +23,7 @@ builder.Services.AddResiliencePipeline("BackgroundService", options =>
         {
             Delay = TimeSpan.FromSeconds(10)
         })
-        .AddTimeout(TimeSpan.FromMinutes(1));
+        .AddTimeout(TimeSpan.FromMinutes(15));
 });
 
 builder.Services.AddCors(options =>
