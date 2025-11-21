@@ -5,7 +5,7 @@ namespace Temasek.Calendarr.Options;
 public class BdeComdOptions
 {
   /// <summary>
-  /// Source calendar to attach Service Account to attendees and monitor for new events
+  /// Source calendar to monitor for new events
   /// </summary>
   public required string SourceCalendarId { get; set; }
   /// <summary>

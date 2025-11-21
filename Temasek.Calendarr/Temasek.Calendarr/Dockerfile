@@ -16,6 +16,8 @@ RUN dotnet build "./Temasek.Calendarr.csproj" -c $BUILD_CONFIGURATION -o /app/bu
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./Temasek.Calendarr.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN wget -O /app/publish/assets/vocab.txt "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/raw/main/vocab.txt"
+RUN wget -O /app/publish/assets/model.onnx "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model_qint8_avx512.onnx"
 
 FROM base AS final
 WORKDIR /app
