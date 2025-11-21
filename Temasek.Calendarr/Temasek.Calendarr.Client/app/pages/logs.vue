@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import { useMutation } from '@tanstack/vue-query'
+const messages = ref<string[]>([])
 
-const fullSyncMutation = useMutation({
-  async mutationFn() {
-    // return await useNuxtApp()
-  },
+const { $signalr } = useNuxtApp()
+
+function prepend(value, array) {
+  const newArray = array.slice()
+  newArray.unshift(value)
+  return newArray
+}
+
+onMounted(() => {
+  $signalr.on('ReceiveLog', (...items) => {
+    messages.value = prepend(items, messages.value)
+  })
 })
 </script>
 

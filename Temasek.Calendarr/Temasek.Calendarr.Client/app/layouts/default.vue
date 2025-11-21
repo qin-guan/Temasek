@@ -20,6 +20,15 @@ const links = [
         open.value = false
       },
     },
+    {
+      label: 'Logs',
+      icon: 'i-lucide-wrench',
+      exact: true,
+      to: '/logs',
+      onSelect: () => {
+        open.value = false
+      },
+    },
   ],
 ] satisfies NavigationMenuItem[][]
 </script>
