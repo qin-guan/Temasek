@@ -32,9 +32,6 @@ public class SyncIncrementalBackgroundService(
 
         var tokenRes = await tokenReq.ExecuteAsync(ct);
         _syncToken = tokenRes.NextSyncToken;
-        logger.LogInformation("Retrieved sync token : {SyncToken}", _syncToken);
-
-        await Task.Delay(options.Value.SyncInterval, stoppingToken);
         logger.LogInformation("Running sync with token : {SyncToken}", _syncToken);
 
         var changedEvents = await calendarService.Events.ListAll(
@@ -77,6 +74,8 @@ public class SyncIncrementalBackgroundService(
           }
         }
       }, stoppingToken);
+
+      await Task.Delay(options.Value.SyncInterval, stoppingToken);
     }
   }
 }

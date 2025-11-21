@@ -28,16 +28,20 @@ builder.AddJavaScriptApp("temasek-operatorr-client", "../Temasek.Operatorr/Temas
     .WaitFor(operatorr);
 
 var calendarrServiceAccountJsonCredential = builder.AddParameter("calendarr-service-account-json-credential", secret: true);
-var calendarrBdeComdServiceAccountJsonCredential = builder.AddParameter("calendarr-bde-comd-service-account-json-credential", secret: true);
 var calendarrParentCalendarId = builder.AddParameter("calendarr-parent-calendar-id");
 var calendarrChildCalendarId = builder.AddParameter("calendarr-child-calendar-id");
-var calendarrSyncInterval = builder.AddParameter("calendarr-sync-interval", "0:0:10");
+var calendarrSyncInterval = builder.AddParameter("calendarr-sync-interval", "0:1:0");
+var calendarrBdeComdSourceCalendarId = builder.AddParameter("calendarr-bde-comd-source-calendar-id");
+var calendarrBdeComdTargetCalendarId = builder.AddParameter("calendarr-bde-comd-target-calendar-id");
+var calendarrBdeComdSyncInterval = builder.AddParameter("calendarr-bde-comd-sync-interval", "0:0:10");
 var calendarr = builder.AddProject<Projects.Temasek_Calendarr>("temasek-calendarr")
-    .WithEnvironment("Sync:BdeComdServiceAccountJsonCredential", calendarrBdeComdServiceAccountJsonCredential)
     .WithEnvironment("Sync:ServiceAccountJsonCredential", calendarrServiceAccountJsonCredential)
     .WithEnvironment("Sync:ParentCalendarId", calendarrParentCalendarId)
     .WithEnvironment("Sync:ChildCalendarId", calendarrChildCalendarId)
-    .WithEnvironment("Sync:SyncInterval", calendarrSyncInterval);
+    .WithEnvironment("Sync:SyncInterval", calendarrSyncInterval)
+    .WithEnvironment("BdeComd:SourceCalendarId", calendarrBdeComdSourceCalendarId)
+    .WithEnvironment("BdeComd:TargetCalendarId", calendarrBdeComdTargetCalendarId)
+    .WithEnvironment("BdeComd:SyncInterval", calendarrBdeComdSyncInterval);
     
 builder.AddJavaScriptApp("temasek-calendarr-client", "../Temasek.Calendarr/Temasek.Calendarr.Client")
     .WithNpm(false)

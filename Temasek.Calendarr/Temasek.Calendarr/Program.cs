@@ -13,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOptions<SyncOptions>()
     .Bind(builder.Configuration.GetSection("Sync"));
+builder.Services.AddOptions<BdeComdOptions>()
+    .Bind(builder.Configuration.GetSection("BdeComd"));
 
 builder.Services.AddResiliencePipeline("BackgroundService", options =>
 {
@@ -66,7 +68,7 @@ builder.Services.AddKeyedSingleton("Sync", (sp, _) =>
 builder.Services.AddKeyedSingleton("BdeComd", (sp, _) =>
 {
     var options = sp.GetRequiredService<IOptions<SyncOptions>>();
-    var s = Convert.FromBase64String(options.Value.BdeComdServiceAccountJsonCredential);
+    var s = Convert.FromBase64String(options.Value.ServiceAccountJsonCredential);
 
     var credential = CredentialFactory.FromJson<ServiceAccountCredential>(Encoding.UTF8.GetString(s));
     credential.Scopes = [
@@ -82,8 +84,9 @@ builder.Services.AddKeyedSingleton("BdeComd", (sp, _) =>
     return service;
 });
 
-
 builder.Services.AddSingleton<ILoggerProvider, SignalRLoggerProvider>();
+
+builder.Services.AddHostedService<BdeComdSourceConflictBackgroundService>();
 builder.Services.AddHostedService<SyncIncrementalBackgroundService>();
 
 var app = builder.Build();
