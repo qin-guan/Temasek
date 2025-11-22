@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     '@nuxt/test-utils',
     '@nuxt/ui',
     '@clerk/nuxt',
+    '@vueuse/nuxt',
   ],
   ssr: false,
   devtools: { enabled: true },

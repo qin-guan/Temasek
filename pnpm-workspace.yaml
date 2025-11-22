@@ -2,3 +2,4 @@ packages:
   - Temasek.Operatorr/Temasek.Operatorr.Client
   - Temasek.Calendarr/Temasek.Calendarr.Client
   - Temasek.Auth/Temasek.Auth.Client
+  - Temasek.Facilities/Temasek.Facilities.Client

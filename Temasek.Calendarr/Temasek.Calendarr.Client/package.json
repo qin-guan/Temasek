@@ -22,6 +22,8 @@
     "@nuxt/ui": "^4.1.0",
     "@tanstack/vue-query": "^5.91.2",
     "@unhead/vue": "^2.0.19",
+    "@vueuse/core": "^14.0.0",
+    "@vueuse/nuxt": "^14.0.0",
     "eslint": "^9.39.1",
     "nuxt": "^4.2.1",
     "tailwindcss": "^4.1.17",

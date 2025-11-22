@@ -1,11 +1,5 @@
 <script setup lang="ts">
 import { useMutation } from '@tanstack/vue-query'
-
-const fullSyncMutation = useMutation({
-  async mutationFn() {
-    // return await useNuxtApp()
-  },
-})
 </script>
 
 <template>
@@ -19,9 +13,7 @@ const fullSyncMutation = useMutation({
     </template>
 
     <template #body>
-      <div class="space-y-2">
-        <UTable :data="messages" />
-      </div>
+      <div class="space-y-2" />
     </template>
   </UDashboardPanel>
 </template>

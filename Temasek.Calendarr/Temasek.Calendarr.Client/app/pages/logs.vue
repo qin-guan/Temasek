@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const messages = ref<string[]>([])
 
-const { $signalr } = useNuxtApp()
+const signalr = useSignalr()
 
 function prepend(value, array) {
   const newArray = array.slice()
@@ -10,16 +10,16 @@ function prepend(value, array) {
 }
 
 onMounted(() => {
-  $signalr.on('ReceiveLog', (...items) => {
+  signalr.on('ReceiveLog', (...items) => {
     messages.value = prepend(items, messages.value)
   })
 })
 </script>
 
 <template>
-  <UDashboardPanel id="dashboard">
+  <UDashboardPanel id="logs">
     <template #header>
-      <UDashboardNavbar title="Dashboard">
+      <UDashboardNavbar title="Logs">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
