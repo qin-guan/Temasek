@@ -1,5 +1,5 @@
 {
-  "name": "Temasek-Calendarr-Client",
+  "name": "@temasek/calendarr",
   "type": "module",
   "private": true,
   "scripts": {

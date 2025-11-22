@@ -1,16 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Clerk.BackendAPI;
+using Clerk.BackendAPI.Models.Operations;
 using FastEndpoints;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Temasek.Auth.Options;
 
-namespace Temasek.Auth.Features.FormSg.Validate.Callback;
+namespace Temasek.Auth.Endpoints.FormSg.Validate.Callback;
 
 public class Endpoint(ILogger<Endpoint> logger, IOptions<FormSgOptions> formSgOptions, ClerkBackendApi clerk) : Endpoint<Request>
 {
@@ -58,7 +56,7 @@ public class Endpoint(ILogger<Endpoint> logger, IOptions<FormSgOptions> formSgOp
 
       var user = await clerk.Users.GetAsync(userId);
 
-      await clerk.Users.UpdateMetadataAsync(userId, new Clerk.BackendAPI.Models.Operations.UpdateUserMetadataRequestBody
+      await clerk.Users.UpdateMetadataAsync(userId, new UpdateUserMetadataRequestBody
       {
          PublicMetadata = new Dictionary<string, object>
         {

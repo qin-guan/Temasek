@@ -1,4 +1,4 @@
-namespace Temasek.Auth.Features.FormSg.Validate.Index;
+namespace Temasek.Auth.Endpoints.FormSg.Validate.Index;
 
 public class Response
 {

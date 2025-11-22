@@ -6,11 +6,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Temasek.Auth.Options;
 
-namespace Temasek.Auth.Features.FormSg.Validate.Index;
+namespace Temasek.Auth.Endpoints.FormSg.Validate.Index;
 
 public class Endpoint(IOptions<FormSgOptions> formSgOptions) : EndpointWithoutRequest<Response>
 {
-    public const string Issuer = "Temasek.Auth.Features.FormSg.Validate";
+    public const string Issuer = "Temasek.Auth.Endpoints.FormSg.Validate";
 
     private readonly byte[] secretKeyBytes = Encoding.UTF8.GetBytes(formSgOptions.Value.SecretKey);
 

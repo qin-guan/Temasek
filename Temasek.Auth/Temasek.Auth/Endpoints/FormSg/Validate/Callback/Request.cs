@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Temasek.Auth.Features.FormSg.Validate.Callback;
+namespace Temasek.Auth.Endpoints.FormSg.Validate.Callback;
 
 public class Request
 {

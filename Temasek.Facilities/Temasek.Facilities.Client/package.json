@@ -1,5 +1,5 @@
 {
-  "name": "Temasek-Facilities-Client",
+  "name": "@temasek/facilities",
   "type": "module",
   "private": true,
   "scripts": {
@@ -10,15 +10,23 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/eslint": "1.10.0",
-    "@nuxt/hints": "1.0.0-alpha.2",
-    "@nuxt/image": "2.0.0",
-    "@nuxt/scripts": "0.13.0",
-    "@nuxt/test-utils": "3.20.1",
-    "@nuxt/ui": "4.2.1",
+    "@clerk/nuxt": "^1.12.1",
+    "@clerk/themes": "^2.4.36",
+    "@microsoft/signalr": "^10.0.0",
+    "@nuxt/eslint": "^1.10.0",
+    "@nuxt/fonts": "^0.12.1",
+    "@nuxt/hints": "^1.0.0-alpha.1",
+    "@nuxt/image": "^2.0.0",
+    "@nuxt/scripts": "^0.13.0",
+    "@nuxt/test-utils": "^3.20.1",
+    "@nuxt/ui": "^4.1.0",
+    "@tanstack/vue-query": "^5.91.2",
     "@unhead/vue": "^2.0.19",
+    "@vueuse/core": "^14.0.0",
+    "@vueuse/nuxt": "^14.0.0",
     "eslint": "^9.39.1",
     "nuxt": "^4.2.1",
+    "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
     "vue": "^3.5.24",
     "vue-router": "^4.6.3"

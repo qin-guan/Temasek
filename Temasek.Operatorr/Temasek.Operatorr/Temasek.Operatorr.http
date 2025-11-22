@@ -1,11 +1,6 @@
-@Temasek.Operatorr_HostAddress = http://localhost:5191
+@Temasek.Operatorr_HostAddress = http://localhost:5038
 
-GET {{Temasek.Operatorr_HostAddress}}/todos/
-Accept: application/json
-
-###
-
-GET {{Temasek.Operatorr_HostAddress}}/todos/1
+GET {{Temasek.Operatorr_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

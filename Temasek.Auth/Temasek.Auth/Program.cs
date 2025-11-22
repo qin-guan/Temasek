@@ -3,8 +3,9 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
-using Temasek.Auth.Authentication;
 using Temasek.Auth.Options;
+using Temasek.Clerk;
+using Temasek.Clerk.Options;
 using Temasek.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,12 +52,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseFastEndpoints();
 
 app.Run();

@@ -15,16 +15,12 @@
         <PackageReference Include="FastEndpoints.ClientGen.Kiota" Version="7.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
         <PackageReference Include="Scalar.AspNetCore" Version="2.10.3" />
+        <PackageReference Include="SqlSugarCore" Version="5.1.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\..\Temasek.Clerk\Temasek.Clerk.csproj" />
     </ItemGroup>
 
 </Project>

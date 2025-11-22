@@ -1,14 +1,11 @@
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Encodings.Web;
 using Clerk.BackendAPI.Helpers.Jwks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Temasek.Auth.Options;
+using Temasek.Clerk.Options;
 
-namespace Temasek.Auth.Authentication;
+namespace Temasek.Clerk;
 
 public class ClerkAuthenticationHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -17,7 +14,7 @@ public class ClerkAuthenticationHandler(
     IOptions<ClerkOptions> clerkOptions
 ) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
-    internal const string SchemeName = "Clerk";
+    public const string SchemeName = "Clerk";
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {

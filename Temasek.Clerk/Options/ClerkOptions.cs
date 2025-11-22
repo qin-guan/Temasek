@@ -1,4 +1,4 @@
-namespace Temasek.Auth.Options;
+namespace Temasek.Clerk.Options;
 
 public class ClerkOptions
 {
