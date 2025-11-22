@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import { useMutation } from '@tanstack/vue-query'
-</script>
-
 <template>
   <UDashboardPanel id="dashboard">
     <template #header>

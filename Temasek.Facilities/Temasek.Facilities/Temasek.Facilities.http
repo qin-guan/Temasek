@@ -1,0 +1,6 @@
+@Temasek.Facilities_HostAddress = http://localhost:5081
+
+GET {{Temasek.Facilities_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

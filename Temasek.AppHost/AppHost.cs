@@ -30,10 +30,10 @@ builder.AddJavaScriptApp("temasek-operatorr-client", "../Temasek.Operatorr/Temas
 var calendarrServiceAccountJsonCredential = builder.AddParameter("calendarr-service-account-json-credential", secret: true);
 var calendarrParentCalendarId = builder.AddParameter("calendarr-parent-calendar-id");
 var calendarrChildCalendarId = builder.AddParameter("calendarr-child-calendar-id");
-var calendarrSyncInterval = builder.AddParameter("calendarr-sync-interval", "0:1:0");
+var calendarrSyncInterval = builder.AddParameter("calendarr-sync-interval", "1:0:0");
 var calendarrBdeComdSourceCalendarId = builder.AddParameter("calendarr-bde-comd-source-calendar-id");
 var calendarrBdeComdTargetCalendarId = builder.AddParameter("calendarr-bde-comd-target-calendar-id");
-var calendarrBdeComdSyncInterval = builder.AddParameter("calendarr-bde-comd-sync-interval", "0:0:10");
+var calendarrBdeComdSyncInterval = builder.AddParameter("calendarr-bde-comd-sync-interval", "1:0:0");
 var calendarr = builder.AddProject<Projects.Temasek_Calendarr>("temasek-calendarr")
     .WithEnvironment("Sync:ServiceAccountJsonCredential", calendarrServiceAccountJsonCredential)
     .WithEnvironment("Sync:ParentCalendarId", calendarrParentCalendarId)
@@ -50,5 +50,14 @@ builder.AddJavaScriptApp("temasek-calendarr-client", "../Temasek.Calendarr/Temas
     .WithHttpEndpoint(port: 3002, env: "PORT")
     .WithReference(calendarr)
     .WaitFor(calendarr);
+
+var facilities = builder.AddProject<Projects.Temasek_Facilities>("temasek-facilities");
+builder.AddJavaScriptApp("temasek-facilities-client", "../Temasek.Facilities/Temasek.Facilitie.Client")
+    .WithNpm(false)
+    .WithEnvironment("NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY", clerkPublishableKey)
+    .WithEnvironment("NUXT_CLERK_SECRET_KEY", clerkSecretKey)
+    .WithHttpEndpoint(port: 3003, env: "PORT")
+    .WithReference(facilities)
+    .WaitFor(facilities);
 
 builder.Build().Run();
