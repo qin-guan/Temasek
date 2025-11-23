@@ -37,29 +37,29 @@ public partial class BdeComdClearChangesBackgroundWorker(
         {
             await pipeline.ExecuteAsync(async (svc, ct) =>
             {
-                var events = await svc.calendarService.Events.ListAll(options.Value.SourceCalendarId, ct: ct);
+                var events = await svc.calendarService.Events.ListAllAsync(options.Value.SourceCalendarId, ct: ct);
 
                 var eventsToClear = events
                     .Where(e => BcSummaryRegex().IsMatch(e.Summary))
                     .Where(e => e.Summary.StartsWith("! "))
                     .Where(e => e.ExtendedProperties?.Shared?[BdeComdSourceCalendarEventMetadata.Key] is not null)
                     .ToImmutableArray();
-                
+
                 logger.LogInformation("Clearing changes for {Count} events", eventsToClear.Length);
 
                 foreach (var @event in eventsToClear)
                 {
                     logger.LogInformation("Clearing modified event : {Summary}", @event.Summary);
-                    
+
                     @event.Summary = @event.Summary.Replace("! ", "");
                     @event.ExtendedProperties.Shared = new Dictionary<string, string>();
                     @event.Description = BcClearDescriptionRegex().Replace(@event.Description, "");
 
                     await svc.calendarService.Events.Update(@event, options.Value.SourceCalendarId, @event.Id).ExecuteAsync(ct);
-                    
+
                     logger.LogInformation("Completed clearing event : {Summary}", @event.Summary);
                 }
-                
+
             }, new { calendarService }, stoppingToken);
 
             await Task.Delay(options.Value.SyncInterval, stoppingToken);

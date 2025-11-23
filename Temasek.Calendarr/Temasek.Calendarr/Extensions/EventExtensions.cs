@@ -20,8 +20,8 @@ public static class EventExtensions
             End = @event.End
         };
     }
-    
-    public static async Task<List<Event>> ListAll(
+
+    public static async Task<List<Event>> ListAllAsync(
         this EventsResource resource,
         string calendarId,
         bool showDeleted = false,

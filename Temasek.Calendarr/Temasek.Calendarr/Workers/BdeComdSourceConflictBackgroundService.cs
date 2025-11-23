@@ -46,7 +46,7 @@ public partial class BdeComdSourceConflictBackgroundService(
                 //     logger.LogInformation("Running sync with token : {SyncToken}", _syncToken);
                 // }
                 //
-                var changedEvents = await calendarService.Events.ListAll(
+                var changedEvents = await calendarService.Events.ListAllAsync(
                     options.Value.SourceCalendarId,
                     // syncToken: _syncToken,
                     ct: ct
@@ -60,7 +60,7 @@ public partial class BdeComdSourceConflictBackgroundService(
 
                 logger.LogInformation("Syncing changes since last update : {Diff}", changedEvents.Count);
 
-                var targetEvents = await calendarService.Events.ListAll(options.Value.TargetCalendarId, ct: ct);
+                var targetEvents = await calendarService.Events.ListAllAsync(options.Value.TargetCalendarId, ct: ct);
                 var defaultMeta = new BdeComdSourceCalendarEventMetadataV1
                 {
                     LastBdeComdEventSync = null
@@ -94,7 +94,7 @@ public partial class BdeComdSourceConflictBackgroundService(
                     })
                     .Where(d => d.Metadata.LastBdeComdEventSync is null)
                     .ToImmutableArray();
-                
+
                 logger.LogInformation("Checking conflicts for {Count} events", eventsToCheck.Count());
 
                 var comp = new SemanticComparator(options.Value.ModelPath, options.Value.VocabPath);
@@ -130,7 +130,7 @@ public partial class BdeComdSourceConflictBackgroundService(
                     {
                         continue;
                     }
-                    
+
                     logger.LogInformation("Overlaps detected for {Summary} : {Count}", data.Event.Summary, overlappingEvents.Length);
 
                     data.Metadata.LastBdeComdEventSync = DateTimeOffset.UtcNow;
@@ -155,7 +155,7 @@ public partial class BdeComdSourceConflictBackgroundService(
                     await calendarService.Events
                         .Update(data.Event, options.Value.SourceCalendarId, data.Event.Id)
                         .ExecuteAsync(ct);
-                    
+
                     logger.LogInformation("Updated event {Summary}", data.Event.Summary);
                 }
             }, stoppingToken);

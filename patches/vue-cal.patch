@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index d720cc4f92df2d658d0ca64b831b58604d384549..ca053c36d1e3e40d35a03322ea6a81c03345cebf 100644
+--- a/package.json
++++ b/package.json
+@@ -20,7 +20,8 @@
+   "exports": {
+     ".": {
+       "import": "./dist/vue-cal.es.js",
+-      "require": "./dist/vue-cal.cjs.js"
++      "require": "./dist/vue-cal.cjs.js",
++      "types": "./dist/vue-cal.d.ts"
+     },
+     "./style": {
+       "default": "./dist/vue-cal.css"

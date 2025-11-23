@@ -1,6 +1,8 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication;
+using SqlSugar;
 using Temasek.Clerk;
+using Temasek.Facilities.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,27 @@ builder.Services
     .AddAuthorization()
     .AddAuthentication(ClerkAuthenticationHandler.SchemeName)
     .AddScheme<AuthenticationSchemeOptions, ClerkAuthenticationHandler>(ClerkAuthenticationHandler.SchemeName, null);
+
+builder.Services.AddSingleton<ISqlSugarClient>(s =>
+{
+    var sqlSugar = new SqlSugarScope(new ConnectionConfig()
+    {
+        DbType = DbType.Sqlite,
+        ConnectionString = "DataSource=app.db",
+        IsAutoCloseConnection = true,
+    },
+    db =>
+    {
+        db.Aop.OnLogExecuting = (sql, p) =>
+        {
+            Console.WriteLine(sql);
+        };
+    });
+
+    return sqlSugar;
+});
+
+builder.Services.AddHostedService<DatabaseMigrationBackgroundService>();
 
 var app = builder.Build();
 

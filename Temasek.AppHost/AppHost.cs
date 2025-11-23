@@ -42,7 +42,7 @@ var calendarr = builder.AddProject<Projects.Temasek_Calendarr>("temasek-calendar
     .WithEnvironment("BdeComd:SourceCalendarId", calendarrBdeComdSourceCalendarId)
     .WithEnvironment("BdeComd:TargetCalendarId", calendarrBdeComdTargetCalendarId)
     .WithEnvironment("BdeComd:SyncInterval", calendarrBdeComdSyncInterval);
-    
+
 builder.AddJavaScriptApp("temasek-calendarr-client", "../Temasek.Calendarr/Temasek.Calendarr.Client")
     .WithNpm(false)
     .WithEnvironment("NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY", clerkPublishableKey)
@@ -52,7 +52,7 @@ builder.AddJavaScriptApp("temasek-calendarr-client", "../Temasek.Calendarr/Temas
     .WaitFor(calendarr);
 
 var facilities = builder.AddProject<Projects.Temasek_Facilities>("temasek-facilities");
-builder.AddJavaScriptApp("temasek-facilities-client", "../Temasek.Facilities/Temasek.Facilitie.Client")
+builder.AddJavaScriptApp("temasek-facilities-client", "../Temasek.Facilities/Temasek.Facilities.Client")
     .WithNpm(false)
     .WithEnvironment("NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY", clerkPublishableKey)
     .WithEnvironment("NUXT_CLERK_SECRET_KEY", clerkSecretKey)
