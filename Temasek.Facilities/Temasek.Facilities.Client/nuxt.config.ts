@@ -29,6 +29,10 @@ export default defineNuxtConfig({
     cloudflare: {
       wrangler: {
         keep_vars: true,
+        vars: {
+          SERVICES__TEMASEK_FACILITIES_HTTPS_0: 'https://temasek-facilities.from.sg',
+          PNPM_VERSION: '10.18.3',
+        },
         observability: {
           logs: {
             enabled: true,
