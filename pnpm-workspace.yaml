@@ -4,5 +4,5 @@ packages:
   - Temasek.Auth/Temasek.Auth.Client
   - Temasek.Facilities/Temasek.Facilities.Client
 
-patchedDependencies:
-  vue-cal: patches/vue-cal.patch
+# patchedDependencies:
+#   vue-cal: patches/vue-cal.patch
