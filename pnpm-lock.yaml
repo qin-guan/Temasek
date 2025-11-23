@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  vue-cal:
-    hash: 827751f6ebd3fb6c3faea1f663c8a112d0dc7897df42056ff219c5688b97bacf
-    path: patches/vue-cal.patch
-
 importers:
 
   Temasek.Auth/Temasek.Auth.Client:
@@ -186,7 +181,7 @@ importers:
         version: 3.5.24(typescript@5.9.3)
       vue-cal:
         specifier: 5.0.1-rc.33
-        version: 5.0.1-rc.33(patch_hash=827751f6ebd3fb6c3faea1f663c8a112d0dc7897df42056ff219c5688b97bacf)(vue@3.5.24(typescript@5.9.3))
+        version: 5.0.1-rc.33(vue@3.5.24(typescript@5.9.3))
       vue-router:
         specifier: ^4.6.3
         version: 4.6.3(vue@3.5.24(typescript@5.9.3))
@@ -12375,7 +12370,7 @@ snapshots:
     dependencies:
       ufo: 1.6.1
 
-  vue-cal@5.0.1-rc.33(patch_hash=827751f6ebd3fb6c3faea1f663c8a112d0dc7897df42056ff219c5688b97bacf)(vue@3.5.24(typescript@5.9.3)):
+  vue-cal@5.0.1-rc.33(vue@3.5.24(typescript@5.9.3)):
     dependencies:
       vue: 3.5.24(typescript@5.9.3)
 
