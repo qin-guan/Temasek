@@ -17,8 +17,7 @@ export default defineNuxtConfig({
       wrangler: {
         keep_vars: true,
         vars: {
-          SERVICES__TEMASEK_CALENDARR_HTTPS_0: 'https://temasek-calendarr.from.sg',
-          PNPM_VERSION: '10.18.3',
+          SERVICES__TEMASEK_CALENDARR_HTTPS_0: 'https://temasek-calendarr.from.sg'
         },
         observability: {
           logs: {
