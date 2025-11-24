@@ -1,31 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>6bedb35f-ab2a-4bbf-8222-75bfa2f60148</UserSecretsId>
+    <RootNamespace>Temasek.Auth</RootNamespace>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <UserSecretsId>6bedb35f-ab2a-4bbf-8222-75bfa2f60148</UserSecretsId>
-        <RootNamespace>Temasek.Auth</RootNamespace>
-    </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Clerk.BackendAPI" Version="0.14.0" />
+    <PackageReference Include="FastEndpoints" Version="7.1.1" />
+    <PackageReference Include="FastEndpoints.ClientGen.Kiota" Version="7.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.10.3" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Clerk.BackendAPI" Version="0.14.0" />
-        <PackageReference Include="FastEndpoints" Version="7.1.1" />
-        <PackageReference Include="FastEndpoints.ClientGen.Kiota" Version="7.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
-        <PackageReference Include="Scalar.AspNetCore" Version="2.10.3" />
-    </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
+  </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="..\..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
-        <ProjectReference Include="..\..\Temasek.Clerk\Temasek.Clerk.csproj" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\..\Temasek.ServiceDefaults\Temasek.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Temasek.Clerk\Temasek.Clerk.csproj" />
+  </ItemGroup>
 </Project>

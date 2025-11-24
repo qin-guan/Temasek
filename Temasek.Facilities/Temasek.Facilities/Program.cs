@@ -11,33 +11,43 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins(builder.Environment.IsDevelopment() ? "http://localhost:3003" : "https://temasek-facilities.from.sg")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy
+            .WithOrigins(
+                builder.Environment.IsDevelopment()
+                    ? "http://localhost:3003"
+                    : "https://temasek-facilities.from.sg"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
-builder.Services
-    .AddFastEndpoints()
+builder
+    .Services.AddFastEndpoints()
     .AddAuthorization()
     .AddAuthentication(ClerkAuthenticationHandler.SchemeName)
-    .AddScheme<AuthenticationSchemeOptions, ClerkAuthenticationHandler>(ClerkAuthenticationHandler.SchemeName, null);
+    .AddScheme<AuthenticationSchemeOptions, ClerkAuthenticationHandler>(
+        ClerkAuthenticationHandler.SchemeName,
+        null
+    );
 
 builder.Services.AddSingleton<ISqlSugarClient>(s =>
 {
-    var sqlSugar = new SqlSugarScope(new ConnectionConfig()
-    {
-        DbType = DbType.Sqlite,
-        ConnectionString = "DataSource=app.db",
-        IsAutoCloseConnection = true,
-    },
-    db =>
-    {
-        db.Aop.OnLogExecuting = (sql, p) =>
+    var sqlSugar = new SqlSugarScope(
+        new ConnectionConfig()
         {
-            Console.WriteLine(sql);
-        };
-    });
+            DbType = DbType.Sqlite,
+            ConnectionString = "DataSource=app.db",
+            IsAutoCloseConnection = true,
+        },
+        db =>
+        {
+            db.Aop.OnLogExecuting = (sql, p) =>
+            {
+                Console.WriteLine(sql);
+            };
+        }
+    );
 
     return sqlSugar;
 });

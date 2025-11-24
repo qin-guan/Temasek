@@ -16,6 +16,7 @@ public class Booking
     public string? UserPhone { get; set; }
 
     public Guid FacilityId { get; set; }
+
     [Navigate(NavigateType.ManyToOne, nameof(FacilityId), nameof(Facility.Id))]
     public Facility? FacilityName { get; set; }
 }

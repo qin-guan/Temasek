@@ -5,7 +5,6 @@ namespace Temasek.Calendarr.Logger;
 
 public class SignalRLoggerProvider(IServiceProvider sp) : ILoggerProvider
 {
-
     public ILogger CreateLogger(string categoryName)
     {
         return new SignalRLogger(categoryName, sp);
@@ -18,7 +17,8 @@ public class SignalRLoggerProvider(IServiceProvider sp) : ILoggerProvider
 
     private class SignalRLogger(string category, IServiceProvider sp) : ILogger
     {
-        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+        public IDisposable? BeginScope<TState>(TState state)
+            where TState : notnull => null;
 
         public bool IsEnabled(LogLevel logLevel) => true;
 

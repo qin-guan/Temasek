@@ -10,7 +10,11 @@ using Temasek.Auth.Options;
 
 namespace Temasek.Auth.Endpoints.FormSg.Validate.Callback;
 
-public class Endpoint(ILogger<Endpoint> logger, IOptions<FormSgOptions> formSgOptions, ClerkBackendApi clerk) : Endpoint<Request>
+public class Endpoint(
+    ILogger<Endpoint> logger,
+    IOptions<FormSgOptions> formSgOptions,
+    ClerkBackendApi clerk
+) : Endpoint<Request>
 {
     private readonly byte[] secretKeyBytes = Encoding.UTF8.GetBytes(formSgOptions.Value.SecretKey);
 
@@ -30,23 +34,31 @@ public class Endpoint(ILogger<Endpoint> logger, IOptions<FormSgOptions> formSgOp
 
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        var principal = await tokenHandler.ValidateTokenAsync(req.ClerkUserId, new TokenValidationParameters
-        {
-            // I don't think this would cause any security issues since we only need to get the data
-            ValidateAudience = false,
-            ValidIssuer = Index.Endpoint.Issuer,
-            ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes)
-        });
+        var principal = await tokenHandler.ValidateTokenAsync(
+            req.ClerkUserId,
+            new TokenValidationParameters
+            {
+                // I don't think this would cause any security issues since we only need to get the data
+                ValidateAudience = false,
+                ValidIssuer = Index.Endpoint.Issuer,
+                ValidateLifetime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+            }
+        );
 
         if (principal.IsValid == false)
         {
-            logger.LogWarning("Failed to verify Clerk User ID token: {Message}", principal.Exception.Message);
+            logger.LogWarning(
+                "Failed to verify Clerk User ID token: {Message}",
+                principal.Exception.Message
+            );
             await Send.ForbiddenAsync(ct);
             return;
         }
 
-        var userId = principal.ClaimsIdentity.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var userId = principal
+            .ClaimsIdentity.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+            ?.Value;
         if (userId is null)
         {
             logger.LogWarning("Clerk User ID token does not contain NameIdentifier claim");
@@ -56,14 +68,17 @@ public class Endpoint(ILogger<Endpoint> logger, IOptions<FormSgOptions> formSgOp
 
         var user = await clerk.Users.GetAsync(userId);
 
-        await clerk.Users.UpdateMetadataAsync(userId, new UpdateUserMetadataRequestBody
-        {
-            PublicMetadata = new Dictionary<string, object>
-        {
-            { "nric", req.Nric },
-            { "name", req.Name }
-        }
-        });
+        await clerk.Users.UpdateMetadataAsync(
+            userId,
+            new UpdateUserMetadataRequestBody
+            {
+                PublicMetadata = new Dictionary<string, object>
+                {
+                    { "nric", req.Nric },
+                    { "name", req.Name },
+                },
+            }
+        );
 
         await Send.OkAsync(cancellation: ct);
     }

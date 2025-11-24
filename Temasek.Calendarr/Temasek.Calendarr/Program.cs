@@ -11,20 +11,18 @@ using Temasek.Calendarr.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOptions<SyncOptions>()
-    .Bind(builder.Configuration.GetSection("Sync"));
-builder.Services.AddOptions<BdeComdOptions>()
-    .Bind(builder.Configuration.GetSection("BdeComd"));
+builder.Services.AddOptions<SyncOptions>().Bind(builder.Configuration.GetSection("Sync"));
+builder.Services.AddOptions<BdeComdOptions>().Bind(builder.Configuration.GetSection("BdeComd"));
 
-builder.Services.AddResiliencePipeline("BackgroundService", options =>
-{
-    options
-        .AddRetry(new Polly.Retry.RetryStrategyOptions
-        {
-            Delay = TimeSpan.FromSeconds(10)
-        })
-        .AddTimeout(TimeSpan.FromMinutes(15));
-});
+builder.Services.AddResiliencePipeline(
+    "BackgroundService",
+    options =>
+    {
+        options
+            .AddRetry(new Polly.Retry.RetryStrategyOptions { Delay = TimeSpan.FromSeconds(10) })
+            .AddTimeout(TimeSpan.FromMinutes(15));
+    }
+);
 
 builder.Services.AddCors(options =>
 {
@@ -38,51 +36,59 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins("https://temasek-calendarr.from.sg");
         }
-        policy.AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+        policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials();
     });
 });
 builder.Services.AddSignalR();
 builder.Services.AddOpenApi();
 
-builder.Services.AddKeyedSingleton("Sync", (sp, _) =>
-{
-    var options = sp.GetRequiredService<IOptions<SyncOptions>>();
-    var s = Convert.FromBase64String(options.Value.ServiceAccountJsonCredential);
-
-    var credential = CredentialFactory.FromJson<ServiceAccountCredential>(Encoding.UTF8.GetString(s));
-    credential.Scopes = [
-        "https://www.googleapis.com/auth/calendar",
-        "https://www.googleapis.com/auth/calendar.events"
-    ];
-
-    var service = new CalendarService(new BaseClientService.Initializer
+builder.Services.AddKeyedSingleton(
+    "Sync",
+    (sp, _) =>
     {
-        HttpClientInitializer = credential
-    });
+        var options = sp.GetRequiredService<IOptions<SyncOptions>>();
+        var s = Convert.FromBase64String(options.Value.ServiceAccountJsonCredential);
 
-    return service;
-});
+        var credential = CredentialFactory.FromJson<ServiceAccountCredential>(
+            Encoding.UTF8.GetString(s)
+        );
+        credential.Scopes =
+        [
+            "https://www.googleapis.com/auth/calendar",
+            "https://www.googleapis.com/auth/calendar.events",
+        ];
 
-builder.Services.AddKeyedSingleton("BdeComd", (sp, _) =>
-{
-    var options = sp.GetRequiredService<IOptions<SyncOptions>>();
-    var s = Convert.FromBase64String(options.Value.ServiceAccountJsonCredential);
+        var service = new CalendarService(
+            new BaseClientService.Initializer { HttpClientInitializer = credential }
+        );
 
-    var credential = CredentialFactory.FromJson<ServiceAccountCredential>(Encoding.UTF8.GetString(s));
-    credential.Scopes = [
-        "https://www.googleapis.com/auth/calendar",
-        "https://www.googleapis.com/auth/calendar.events"
-    ];
+        return service;
+    }
+);
 
-    var service = new CalendarService(new BaseClientService.Initializer
+builder.Services.AddKeyedSingleton(
+    "BdeComd",
+    (sp, _) =>
     {
-        HttpClientInitializer = credential
-    });
+        var options = sp.GetRequiredService<IOptions<SyncOptions>>();
+        var s = Convert.FromBase64String(options.Value.ServiceAccountJsonCredential);
 
-    return service;
-});
+        var credential = CredentialFactory.FromJson<ServiceAccountCredential>(
+            Encoding.UTF8.GetString(s)
+        );
+        credential.Scopes =
+        [
+            "https://www.googleapis.com/auth/calendar",
+            "https://www.googleapis.com/auth/calendar.events",
+        ];
+
+        var service = new CalendarService(
+            new BaseClientService.Initializer { HttpClientInitializer = credential }
+        );
+
+        return service;
+    }
+);
 
 builder.Services.AddSingleton<ILoggerProvider, SignalRLoggerProvider>();
 

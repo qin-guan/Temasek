@@ -26,16 +26,22 @@ public class Endpoint(IOptions<FormSgOptions> formSgOptions) : EndpointWithoutRe
             Issuer = Issuer,
             Subject = User.Identities.First(),
             Expires = DateTime.UtcNow.AddMinutes(15),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(secretKeyBytes),
+                SecurityAlgorithms.HmacSha256Signature
+            ),
         };
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
-        await Send.OkAsync(new Response
-        {
-            FormId = formSgOptions.Value.FormId,
-            PrefillFieldId = formSgOptions.Value.PrefillFieldId,
-            ClerkUserId = tokenHandler.WriteToken(token),
-        }, ct);
+        await Send.OkAsync(
+            new Response
+            {
+                FormId = formSgOptions.Value.FormId,
+                PrefillFieldId = formSgOptions.Value.PrefillFieldId,
+                ClerkUserId = tokenHandler.WriteToken(token),
+            },
+            ct
+        );
     }
 }

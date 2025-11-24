@@ -24,56 +24,81 @@ public class SyncIncrementalBackgroundService(
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            await pipeline.ExecuteAsync(async ct =>
-            {
-                var tokenReq = calendarService.Events.List(options.Value.ParentCalendarId);
-                tokenReq.TimeMinDateTimeOffset = DateTimeOffset.Now.AddDays(-7);
-                tokenReq.MaxResults = 2499;
-
-                var tokenRes = await tokenReq.ExecuteAsync(ct);
-                _syncToken = tokenRes.NextSyncToken;
-                logger.LogInformation("Running sync with token : {SyncToken}", _syncToken);
-
-                var changedEvents = await calendarService.Events.ListAllAsync(
-            options.Value.ParentCalendarId,
-            showDeleted: true,
-            syncToken: _syncToken,
-            ct: ct
-          );
-
-                if (changedEvents.Count == 0)
+            await pipeline.ExecuteAsync(
+                async ct =>
                 {
-                    logger.LogInformation("No changes since last update");
-                    return;
-                }
+                    var tokenReq = calendarService.Events.List(options.Value.ParentCalendarId);
+                    tokenReq.TimeMinDateTimeOffset = DateTimeOffset.Now.AddDays(-7);
+                    tokenReq.MaxResults = 2499;
 
-                logger.LogInformation("Syncing changes since last update : {Diff}", changedEvents.Count);
-                var childEvents = await calendarService.Events.ListAllAsync(options.Value.ChildCalendarId, ct: stoppingToken);
-                var childEventsLookup = childEvents.ToDictionary(e => e.Id, e => e);
+                    var tokenRes = await tokenReq.ExecuteAsync(ct);
+                    _syncToken = tokenRes.NextSyncToken;
+                    logger.LogInformation("Running sync with token : {SyncToken}", _syncToken);
 
-                foreach (var @event in changedEvents)
-                {
-                    if (@event.Status == "cancelled")
+                    var changedEvents = await calendarService.Events.ListAllAsync(
+                        options.Value.ParentCalendarId,
+                        showDeleted: true,
+                        syncToken: _syncToken,
+                        ct: ct
+                    );
+
+                    if (changedEvents.Count == 0)
                     {
-                        logger.LogInformation("Deleting event in child calendar : {EventSummary}", @event.Summary);
-                        await calendarService.Events.Delete(options.Value.ChildCalendarId, @event.Id)
-                    .ExecuteAsync(ct);
+                        logger.LogInformation("No changes since last update");
+                        return;
                     }
 
-                    if (childEventsLookup.ContainsKey(@event.Id))
+                    logger.LogInformation(
+                        "Syncing changes since last update : {Diff}",
+                        changedEvents.Count
+                    );
+                    var childEvents = await calendarService.Events.ListAllAsync(
+                        options.Value.ChildCalendarId,
+                        ct: stoppingToken
+                    );
+                    var childEventsLookup = childEvents.ToDictionary(e => e.Id, e => e);
+
+                    foreach (var @event in changedEvents)
                     {
-                        logger.LogInformation("Updating event in child calendar : {EventSummary}", @event.Summary);
-                        await calendarService.Events.Update(@event.Clone(), options.Value.ChildCalendarId, @event.Id)
-                    .ExecuteAsync(ct);
+                        if (@event.Status == "cancelled")
+                        {
+                            logger.LogInformation(
+                                "Deleting event in child calendar : {EventSummary}",
+                                @event.Summary
+                            );
+                            await calendarService
+                                .Events.Delete(options.Value.ChildCalendarId, @event.Id)
+                                .ExecuteAsync(ct);
+                        }
+
+                        if (childEventsLookup.ContainsKey(@event.Id))
+                        {
+                            logger.LogInformation(
+                                "Updating event in child calendar : {EventSummary}",
+                                @event.Summary
+                            );
+                            await calendarService
+                                .Events.Update(
+                                    @event.Clone(),
+                                    options.Value.ChildCalendarId,
+                                    @event.Id
+                                )
+                                .ExecuteAsync(ct);
+                        }
+                        else
+                        {
+                            logger.LogInformation(
+                                "Inserting event in child calendar : {EventSummary}",
+                                @event.Summary
+                            );
+                            await calendarService
+                                .Events.Insert(@event.Clone(), options.Value.ChildCalendarId)
+                                .ExecuteAsync(ct);
+                        }
                     }
-                    else
-                    {
-                        logger.LogInformation("Inserting event in child calendar : {EventSummary}", @event.Summary);
-                        await calendarService.Events.Insert(@event.Clone(), options.Value.ChildCalendarId)
-                    .ExecuteAsync(ct);
-                    }
-                }
-            }, stoppingToken);
+                },
+                stoppingToken
+            );
 
             await Task.Delay(options.Value.SyncInterval, stoppingToken);
         }

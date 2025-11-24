@@ -1,24 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="Aspire.AppHost.Sdk" Version="13.0.0" />
 
-    <Sdk Name="Aspire.AppHost.Sdk" Version="13.0.0"/>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>eb1a67d1-bdf0-4f99-866f-91dd0c42bc25</UserSecretsId>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <UserSecretsId>eb1a67d1-bdf0-4f99-866f-91dd0c42bc25</UserSecretsId>
-    </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Javascript" Version="13.0.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.Javascript" Version="13.0.0"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Temasek.Auth\Temasek.Auth\Temasek.Auth.csproj"/>
-        <ProjectReference Include="..\Temasek.Calendarr\Temasek.Calendarr\Temasek.Calendarr.csproj"/>
-        <ProjectReference Include="..\Temasek.Operatorr\Temasek.Operatorr\Temasek.Operatorr.csproj"/>
-        <ProjectReference Include="..\Temasek.Facilities\Temasek.Facilities\Temasek.Facilities.csproj"/>
-    </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\Temasek.Auth\Temasek.Auth\Temasek.Auth.csproj" />
+    <ProjectReference Include="..\Temasek.Calendarr\Temasek.Calendarr\Temasek.Calendarr.csproj" />
+    <ProjectReference Include="..\Temasek.Operatorr\Temasek.Operatorr\Temasek.Operatorr.csproj" />
+    <ProjectReference Include="..\Temasek.Facilities\Temasek.Facilities\Temasek.Facilities.csproj" />
+  </ItemGroup>
 </Project>

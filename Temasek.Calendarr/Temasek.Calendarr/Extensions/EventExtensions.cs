@@ -17,7 +17,7 @@ public static class EventExtensions
             Location = @event.Location,
             Recurrence = @event.Recurrence,
             Start = @event.Start,
-            End = @event.End
+            End = @event.End,
         };
     }
 

@@ -3,9 +3,7 @@ using SqlSugar;
 
 namespace Temasek.Facilities.Endpoints.Booking.ById.Delete;
 
-public class Endpoint(
-    ISqlSugarClient db
-) : Endpoint<Request, Response>
+public class Endpoint(ISqlSugarClient db) : Endpoint<Request, Response>
 {
     public override void Configure()
     {

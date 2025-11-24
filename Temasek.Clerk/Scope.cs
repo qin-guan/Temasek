@@ -6,10 +6,5 @@ public static class Scope
     public const string TwoSir = "2 SIR";
     public const string FiveSir = "5 SIR";
 
-    public static readonly List<string> All = new()
-  {
-    Hq3Sib,
-    TwoSir,
-    FiveSir
-  };
+    public static readonly List<string> All = new() { Hq3Sib, TwoSir, FiveSir };
 }

@@ -17,8 +17,7 @@ namespace Temasek.Calendarr.Workers;
 
 public partial class BdeComdClearChangesBackgroundWorker(
     [FromKeyedServices("BdeComd")] CalendarService calendarService,
-    [FromKeyedServices("BackgroundService")]
-    ResiliencePipeline pipeline,
+    [FromKeyedServices("BackgroundService")] ResiliencePipeline pipeline,
     ILogger<BdeComdClearChangesBackgroundWorker> logger,
     IOptions<BdeComdOptions> options
 ) : BackgroundService
@@ -35,32 +34,57 @@ public partial class BdeComdClearChangesBackgroundWorker(
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            await pipeline.ExecuteAsync(async (svc, ct) =>
-            {
-                var events = await svc.calendarService.Events.ListAllAsync(options.Value.SourceCalendarId, ct: ct);
-
-                var eventsToClear = events
-                    .Where(e => BcSummaryRegex().IsMatch(e.Summary))
-                    .Where(e => e.Summary.StartsWith("! "))
-                    .Where(e => e.ExtendedProperties?.Shared?[BdeComdSourceCalendarEventMetadata.Key] is not null)
-                    .ToImmutableArray();
-
-                logger.LogInformation("Clearing changes for {Count} events", eventsToClear.Length);
-
-                foreach (var @event in eventsToClear)
+            await pipeline.ExecuteAsync(
+                async (svc, ct) =>
                 {
-                    logger.LogInformation("Clearing modified event : {Summary}", @event.Summary);
+                    var events = await svc.calendarService.Events.ListAllAsync(
+                        options.Value.SourceCalendarId,
+                        ct: ct
+                    );
 
-                    @event.Summary = @event.Summary.Replace("! ", "");
-                    @event.ExtendedProperties.Shared = new Dictionary<string, string>();
-                    @event.Description = BcClearDescriptionRegex().Replace(@event.Description, "");
+                    var eventsToClear = events
+                        .Where(e => BcSummaryRegex().IsMatch(e.Summary))
+                        .Where(e => e.Summary.StartsWith("! "))
+                        .Where(e =>
+                            e.ExtendedProperties?.Shared?[BdeComdSourceCalendarEventMetadata.Key]
+                                is not null
+                        )
+                        .ToImmutableArray();
 
-                    await svc.calendarService.Events.Update(@event, options.Value.SourceCalendarId, @event.Id).ExecuteAsync(ct);
+                    logger.LogInformation(
+                        "Clearing changes for {Count} events",
+                        eventsToClear.Length
+                    );
 
-                    logger.LogInformation("Completed clearing event : {Summary}", @event.Summary);
-                }
+                    foreach (var @event in eventsToClear)
+                    {
+                        logger.LogInformation(
+                            "Clearing modified event : {Summary}",
+                            @event.Summary
+                        );
 
-            }, new { calendarService }, stoppingToken);
+                        @event.Summary = @event.Summary.Replace("! ", "");
+                        @event.ExtendedProperties.Shared = new Dictionary<string, string>();
+                        @event.Description = BcClearDescriptionRegex()
+                            .Replace(@event.Description, "");
+
+                        await svc
+                            .calendarService.Events.Update(
+                                @event,
+                                options.Value.SourceCalendarId,
+                                @event.Id
+                            )
+                            .ExecuteAsync(ct);
+
+                        logger.LogInformation(
+                            "Completed clearing event : {Summary}",
+                            @event.Summary
+                        );
+                    }
+                },
+                new { calendarService },
+                stoppingToken
+            );
 
             await Task.Delay(options.Value.SyncInterval, stoppingToken);
         }

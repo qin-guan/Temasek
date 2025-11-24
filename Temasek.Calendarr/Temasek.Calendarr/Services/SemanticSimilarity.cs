@@ -18,7 +18,7 @@ public class SemanticComparator : IDisposable
             IntraOpNumThreads = 1,
             InterOpNumThreads = 1,
             GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL,
-            EnableCpuMemArena = true
+            EnableCpuMemArena = true,
         };
 
         try
@@ -72,7 +72,7 @@ public class SemanticComparator : IDisposable
         {
             NamedOnnxValue.CreateFromTensor("input_ids", inputIdsTensor),
             NamedOnnxValue.CreateFromTensor("attention_mask", attentionMaskTensor),
-            NamedOnnxValue.CreateFromTensor("token_type_ids", tokenTypeIdsTensor)
+            NamedOnnxValue.CreateFromTensor("token_type_ids", tokenTypeIdsTensor),
         };
 
         using var results = _session.Run(inputs);
@@ -105,7 +105,8 @@ public class SemanticComparator : IDisposable
         }
 
         var norm = (float)Math.Sqrt(sumSq);
-        if (!(norm > 1e-12)) return pooled;
+        if (!(norm > 1e-12))
+            return pooled;
         {
             for (var j = 0; j < HiddenSize; j++)
             {
