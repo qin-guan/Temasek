@@ -108,5 +108,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapHub<LoggerHub>("/Hubs/Logger");
+app.MapHub<SyncHub>("/Hubs/Sync");
 
 app.Run();

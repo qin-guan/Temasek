@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const messages = ref<string[]>([])
 
-const signalr = useSignalr()
+const signalr = useSignalrLogger()
 
 function prepend(value, array) {
   const newArray = array.slice()
@@ -11,7 +11,7 @@ function prepend(value, array) {
 
 onMounted(() => {
   signalr.on('ReceiveLog', (...items) => {
-    messages.value = prepend(items, messages.value)
+    messages.value = prepend(items, messages.value).slice(0, 1000)
   })
 })
 </script>
