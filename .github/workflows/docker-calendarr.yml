@@ -2,8 +2,14 @@ name: Docker (temasek-calendarr)
 
 on:
   push:
+    paths:
+      - 'Temasek.Calendarr/**'
+      - '.github/workflows/docker-calendarr.yml'
     branches: [ "main", "wip" ]
   pull_request:
+    paths:
+      - 'Temasek.Calendarr/**'
+      - '.github/workflows/docker-calendarr.yml'
     branches: [ "main" ]
 
 env:

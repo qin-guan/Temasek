@@ -2,8 +2,15 @@ name: Docker (temasek-auth)
 
 on:
   push:
+    paths:
+      - 'Temasek.Auth/**'
+      - '.github/workflows/docker-auth.yml'
     branches: [ "main", "wip" ]
+      
   pull_request:
+    paths:
+      - 'Temasek.Auth/**'
+      - '.github/workflows/docker-auth.yml'
     branches: [ "main" ]
 
 env:

@@ -2,8 +2,14 @@ name: Docker (temasek-operatorr)
 
 on:
   push:
+    paths:
+      - 'Temasek.Operatorr/**'
+      - '.github/workflows/docker-operatorr.yml'
     branches: [ "main", "wip" ]
   pull_request:
+    paths:
+      - 'Temasek.Operatorr/**'
+      - '.github/workflows/docker-operatorr.yml'
     branches: [ "main" ]
 
 env:
