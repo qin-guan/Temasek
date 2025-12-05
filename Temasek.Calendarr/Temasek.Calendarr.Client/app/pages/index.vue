@@ -5,7 +5,7 @@ const signalr = useSignalrSync()
 
 const forceRefresh = useMutation({
   async mutationFn(_: MouseEvent) {
-    await signalr.invoke('RunFullSyncAsync')
+    signalr.invoke('RunFullSyncAsync')
     await navigateTo('/logs')
   },
 })
