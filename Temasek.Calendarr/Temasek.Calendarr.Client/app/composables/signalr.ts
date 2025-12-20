@@ -1,39 +1,39 @@
-import {HubConnectionBuilder, LogLevel} from '@microsoft/signalr'
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
 
-export const useSignalrLogger = createSharedComposable(() => {
-    const runtimeConfig = useRuntimeConfig()
+export const useSignalrLogger = createGlobalState(() => {
+  const runtimeConfig = useRuntimeConfig()
 
-    const hub = new HubConnectionBuilder()
-        .withUrl(runtimeConfig.public.api + '/Hubs/Logger')
-        .configureLogging(LogLevel.Debug)
-        .build()
+  const hub = new HubConnectionBuilder()
+    .withUrl(runtimeConfig.public.api + '/Hubs/Logger')
+    .configureLogging(LogLevel.Debug)
+    .build()
 
-    onMounted(async () => {
-        await hub.start()
-    })
+  onMounted(async () => {
+    await hub.start()
+  })
 
-    onBeforeUnmount(async () => {
-        await hub.stop()
-    })
+  onBeforeUnmount(async () => {
+    await hub.stop()
+  })
 
-    return hub
+  return hub
 })
 
-export const useSignalrSync = createSharedComposable(() => {
-    const runtimeConfig = useRuntimeConfig()
+export const useSignalrSync = createGlobalState(() => {
+  const runtimeConfig = useRuntimeConfig()
 
-    const hub = new HubConnectionBuilder()
-        .withUrl(runtimeConfig.public.api + '/Hubs/Sync')
-        .configureLogging(LogLevel.Debug)
-        .build()
+  const hub = new HubConnectionBuilder()
+    .withUrl(runtimeConfig.public.api + '/Hubs/Sync')
+    .configureLogging(LogLevel.Debug)
+    .build()
 
-    onMounted(async () => {
-        await hub.start()
-    })
+  onMounted(async () => {
+    await hub.start()
+  })
 
-    onBeforeUnmount(async () => {
-        await hub.stop()
-    })
+  onBeforeUnmount(async () => {
+    await hub.stop()
+  })
 
-    return hub
+  return hub
 })
