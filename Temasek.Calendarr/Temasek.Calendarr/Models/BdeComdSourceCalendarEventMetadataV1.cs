@@ -1,4 +1,3 @@
-using System;
 using MemoryPack;
 
 namespace Temasek.Calendarr.Models;

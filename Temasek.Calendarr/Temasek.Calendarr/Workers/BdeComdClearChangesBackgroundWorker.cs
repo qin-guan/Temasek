@@ -1,17 +1,11 @@
 using System.Collections.Immutable;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
-using Google.Apis.Calendar.v3.Data;
-using MemoryPack;
 using Microsoft.Extensions.Options;
 using Polly;
 using Temasek.Calendarr.Extensions;
 using Temasek.Calendarr.Models;
 using Temasek.Calendarr.Options;
-using Temasek.Calendarr.Services;
 
 namespace Temasek.Calendarr.Workers;
 

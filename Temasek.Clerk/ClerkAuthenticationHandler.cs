@@ -25,9 +25,14 @@ public class ClerkAuthenticationHandler(
 
         var requestState = await AuthenticateRequest.AuthenticateRequestAsync(Request, options);
 
-        if (!requestState.IsAuthenticated || requestState.Claims is null)
+        if (!requestState.IsAuthenticated)
         {
-            return AuthenticateResult.Fail("Unauthorized");
+            return AuthenticateResult.Fail("Unauthorized as user is not authenticated.");
+        }
+
+        if (requestState.Claims is null)
+        {
+            return AuthenticateResult.Fail("Unauthorized as claims are missing.");
         }
 
         var ticket = new AuthenticationTicket(requestState.Claims, Scheme.Name);

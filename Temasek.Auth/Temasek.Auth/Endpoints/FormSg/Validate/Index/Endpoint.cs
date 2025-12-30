@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using Clerk.BackendAPI;
 using FastEndpoints;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

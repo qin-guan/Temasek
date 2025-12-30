@@ -31,6 +31,12 @@ public partial class BdeComdSourceConflictBackgroundService(
     {
         logger.LogInformation("Starting worker");
 
+        if (options.Value.ModelPath is null || options.Value.VocabPath is null)
+        {
+            logger.LogError("ModelPath or VocabPath is not set. Worker will not run.");
+            return;
+        }
+
         while (!stoppingToken.IsCancellationRequested)
         {
             await pipeline.ExecuteAsync(

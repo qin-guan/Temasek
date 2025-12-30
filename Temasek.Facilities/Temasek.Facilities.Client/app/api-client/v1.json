@@ -1,0 +1,476 @@
+{
+  "x-generator": "NSwag v14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Temasek.Facilities",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/facility": {
+      "get": {
+        "tags": [
+          "Facility"
+        ],
+        "operationId": "TemasekFacilitiesEndpointsFacilityListEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemasekFacilitiesEndpointsFacilityListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/Booking": {
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "operationId": "TemasekFacilitiesEndpointsBookingGetEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TemasekFacilitiesEndpointsBookingGetResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/Booking/{Id}": {
+      "post": {
+        "tags": [
+          "Booking"
+        ],
+        "operationId": "TemasekFacilitiesEndpointsBookingByIdPostEndpoint",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemasekFacilitiesEndpointsBookingByIdPostRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemasekFacilitiesEndpointsBookingByIdPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Booking"
+        ],
+        "operationId": "TemasekFacilitiesEndpointsBookingByIdGetEndpoint",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemasekFacilitiesEndpointsBookingByIdGetResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Booking"
+        ],
+        "operationId": "TemasekFacilitiesEndpointsBookingByIdDeleteEndpoint",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemasekFacilitiesEndpointsBookingByIdDeleteResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TemasekFacilitiesEndpointsFacilityListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Facilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TemasekFacilitiesEndpointsFacilityListFacilityItem"
+            }
+          }
+        }
+      },
+      "TemasekFacilitiesEndpointsFacilityListFacilityItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Group": {
+            "type": "string",
+            "nullable": true
+          },
+          "Scope": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TemasekFacilitiesEndpointsBookingGetResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "FacilityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Conduct": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "StartDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "EndDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TemasekFacilitiesEndpointsBookingByIdPostResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "StartDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "EndDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Conduct": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "FacilityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "UserPhone": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "TemasekFacilitiesEndpointsBookingByIdPostRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Conduct": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocPhone": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "FastEndpointsErrorResponse": {
+        "type": "object",
+        "description": "the dto used to send an error response to the client",
+        "additionalProperties": false,
+        "properties": {
+          "StatusCode": {
+            "type": "integer",
+            "description": "the http status code sent to the client. default is 400.",
+            "format": "int32",
+            "default": 400
+          },
+          "Message": {
+            "type": "string",
+            "description": "the message for the error response",
+            "default": "One or more errors occurred!"
+          },
+          "Errors": {
+            "type": "object",
+            "description": "the collection of errors for the current context",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "TemasekFacilitiesEndpointsBookingByIdGetResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "FacilityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Conduct": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "StartDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "EndDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TemasekFacilitiesEndpointsBookingByIdGetRequest": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "TemasekFacilitiesEndpointsBookingByIdDeleteResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "FacilityName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Conduct": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PocPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "StartDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "EndDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "TemasekFacilitiesEndpointsBookingByIdDeleteRequest": {
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "JWTBearerAuth": {
+        "type": "http",
+        "description": "Enter a JWT token to authorize the requests...",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

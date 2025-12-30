@@ -66,7 +66,27 @@ builder
     .WithReference(calendarr)
     .WaitFor(calendarr);
 
-var facilities = builder.AddProject<Projects.Temasek_Facilities>("temasek-facilities");
+var facilitiesServiceAccountJsonCredential = builder.AddParameter(
+    "facilities-service-account-json-credential",
+    secret: true
+);
+var facilitiesCalendarId = builder.AddParameter("facilities-calendar-id");
+var facilitiesCarbonCopyCalendarId = builder.AddParameter("facilities-carbon-copy-calendar-id");
+var facilitiesAppOptionsBookingV1MigrationToV2BackgroundServiceEnabled = builder.AddParameter(
+    "facilities-BookingV1MigrationToV2BackgroundServiceEnabled"
+);
+
+var facilities = builder
+    .AddProject<Projects.Temasek_Facilities>("temasek-facilities")
+    .WithEnvironment(
+        "App:BookingV1MigrationToV2BackgroundServiceEnabled",
+        facilitiesAppOptionsBookingV1MigrationToV2BackgroundServiceEnabled
+    )
+    .WithEnvironment("Google:ServiceAccountJsonCredential", facilitiesServiceAccountJsonCredential)
+    .WithEnvironment("Google:CalendarId", facilitiesCalendarId)
+    .WithEnvironment("Google:CarbonCopyCalendarId", facilitiesCarbonCopyCalendarId)
+    .WithEnvironment("Clerk:SecretKey", clerkSecretKey);
+
 builder
     .AddJavaScriptApp(
         "temasek-facilities-client",

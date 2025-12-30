@@ -1,10 +1,7 @@
-using System;
 using Google.Apis.Calendar.v3;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using Polly;
 using Temasek.Calendarr.Extensions;
-using Temasek.Calendarr.Hubs;
 using Temasek.Calendarr.Options;
 
 namespace Temasek.Calendarr.Workers;

@@ -13,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddOptions<FormSgOptions>().Bind(builder.Configuration.GetSection("FormSg"));
-
 builder.Services.AddOptions<ClerkOptions>().Bind(builder.Configuration.GetSection("Clerk"));
 
 builder.Services.AddHttpContextAccessor();
@@ -51,13 +50,8 @@ builder.Services.AddScoped(sp => new ClerkBackendApi(
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.UseCors();
 app.UseHttpsRedirection();

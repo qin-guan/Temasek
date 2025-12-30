@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { VueCal } from 'vue-cal'
+import { VueCal, type VueCalConfig } from 'vue-cal'
 import 'vue-cal/style'
 
 useSeoMeta({
   title: 'Bookings',
+})
+
+const { $apiClient } = useNuxtApp()
+
+onMounted(async () => {
+  await $apiClient.facility.get()
 })
 
 const colorMode = useColorMode()
@@ -26,7 +32,7 @@ const cal = useTemplateRef('cal')
 //   return bookings.value?.filter(n => facilitiesUnderFacilityType.value?.some(nn => nn.name == n.facilityName))
 // })
 
-const calOptions = computed(() => {
+const calOptions = computed<VueCalConfig>(() => {
   // const events = []
 
   // for (const booking of bookingsUnderFacilityType.value ?? []) {
@@ -50,8 +56,7 @@ const calOptions = computed(() => {
     snapToInterval: 30,
     eventCreateMinDrag: 20,
     timeStep: 30,
-    editableEvents: true,
-    // minDate: today,
+    editableEvents: false,
     // schedules: facilities.value?.filter(n => n.group === facilityType.value).map(name => ({ label: name.name })),
     // events,
     // onReady,
@@ -69,12 +74,21 @@ const calOptions = computed(() => {
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
+        <template #right>
+          <UTooltip text="Add to Calendar">
+            <UButton
+              icon="i-lucide-calendar-arrow-down"
+              variant="ghost"
+            />
+          </UTooltip>
+        </template>
       </UDashboardNavbar>
     </template>
     <template #body>
       <VueCal
         ref="cal"
         :dark="colorMode.value === 'dark'"
+        v-bind="calOptions"
       >
         <template #schedule-heading="{ schedule }">
           <strong>{{ schedule.label }}</strong>
@@ -86,11 +100,11 @@ const calOptions = computed(() => {
 
 <style scoped>
 .vuecal {
-  --vuecal-primary-color: var(--ui-color-primary);
+  --vuecal-primary-color: var(--ui-primary);
   --vuecal-height: 100%;
 }
 
 :deep(.vuecal__event-placeholder) {
-  background-color: var(--ui-color-primary);
+  background-color: var(--ui-primary);
 }
 </style>

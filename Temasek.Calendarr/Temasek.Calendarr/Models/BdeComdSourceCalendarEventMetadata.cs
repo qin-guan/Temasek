@@ -1,5 +1,3 @@
-using System;
-
 namespace Temasek.Calendarr.Models;
 
 public abstract class BdeComdSourceCalendarEventMetadata
