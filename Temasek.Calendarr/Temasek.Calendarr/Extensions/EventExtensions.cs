@@ -29,7 +29,6 @@ public static class EventExtensions
             Reminders = @event.Reminders,
             ExtendedProperties = @event.ExtendedProperties,
             Source = @event.Source,
-            Sequence = @event.Sequence,
             PrivateCopy = @event.PrivateCopy,
             RecurringEventId = @event.RecurringEventId,
             OriginalStartTime = @event.OriginalStartTime,
