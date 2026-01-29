@@ -7,6 +7,7 @@ using Polly;
 using Temasek.Calendarr.Hubs;
 using Temasek.Calendarr.Logger;
 using Temasek.Calendarr.Options;
+using Temasek.Calendarr.Services;
 using Temasek.Calendarr.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -91,6 +92,7 @@ builder.Services.AddKeyedSingleton(
 );
 
 builder.Services.AddSingleton<ILoggerProvider, SignalRLoggerProvider>();
+builder.Services.AddSingleton<CalendarSyncService>();
 
 builder.Services.AddHostedService<BdeComdSourceConflictBackgroundService>();
 builder.Services.AddHostedService<SyncIncrementalBackgroundService>();
@@ -106,6 +108,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapPost(
+        "/sync/full",
+        async (CalendarSyncService syncService, CancellationToken ct) =>
+        {
+            await syncService.RunFullSyncAsync(ct);
+            return Results.Ok();
+        }
+    )
+    .WithOpenApi();
 
 app.MapHub<LoggerHub>("/Hubs/Logger");
 app.MapHub<SyncHub>("/Hubs/Sync");
