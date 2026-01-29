@@ -80,6 +80,8 @@ public class CalendarSyncService(
             insertRequest.SupportsAttachments = true;
             insertRequest.ConferenceDataVersion = 1;
             await insertRequest.ExecuteAsync(token);
+        
+            await Task.Delay(TimeSpan.FromSeconds(1));
         }
 
         foreach (var childEvent in childEvents)
