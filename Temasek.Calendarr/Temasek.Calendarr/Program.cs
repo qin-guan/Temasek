@@ -109,7 +109,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost(
+app.MapGet(
         "/sync/full",
         async (CalendarSyncService syncService, CancellationToken ct) =>
         {
